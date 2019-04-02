@@ -1,0 +1,5 @@
+/vendor
+/.idea
+.env
+/config/worker.php
+/config/manager.php

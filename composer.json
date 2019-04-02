@@ -1,0 +1,27 @@
+{
+    "name": "crowles/cophi",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Chris Rowles",
+            "email": "cmrowles@pm.me"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Crowles\\Cophi\\": "src"
+        },
+        "files": [
+            "src/Helpers/functions.php"
+        ]
+    },
+    "require": {
+        "ext-dom": "*",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "ext-gearman": "*",
+        "ext-bz2": "*",
+        "ext-curl": "*",
+        "vlucas/phpdotenv": "^3.3"
+    }
+}
