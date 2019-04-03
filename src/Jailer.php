@@ -31,23 +31,17 @@ class Jailer extends Base
     }
 
     /**
-     * @param $phpBase
+     * @param $instance
      * @return mixed
      * @throws Exception
      */
-    public function deploy($phpBase)
+    public function deploy($instance)
     {
         if ($this->isDebug()) {
-            echo "Creating Jail {$this->jailRoot}\n";
+            echo "Deploying {$instance} to {$this->jailRoot}\n";
         }
 
-        $this->build();
-
-        if ($this->isDebug()) {
-            echo "Deploying {$phpBase} to {$this->jailRoot}\n";
-        }
-
-        $cmd = "sudo jk_cp -j {$this->jailRoot} {$phpBase} 2>&1";
+        $cmd = "sudo jk_cp -j {$this->jailRoot} {$instance} 2>&1";
         exec($cmd, $jail_log, $status);
         if ($status > 0) {
             throw new Exception('Failed to install PHP into jail: ' . implode("\n", $jail_log));
@@ -58,9 +52,14 @@ class Jailer extends Base
 
     /**
      * @throws Exception
+     * @return self
      */
     public function build()
     {
+        if ($this->isDebug()) {
+            echo "Creating Jail {$this->jailRoot}\n";
+        }
+
         $cmd = "sudo jk_init -j {$this->jailRoot} netutils basicshell jk_lsh openvpn 2>&1";
         exec($cmd, $init_log, $status);
         if ($status > 0) {
@@ -90,5 +89,7 @@ class Jailer extends Base
         if (file_exists($tmp = "{$this->jailRoot}/tmp")) {
             chmod($tmp, 0775);
         }
+
+        return $this;
     }
 }

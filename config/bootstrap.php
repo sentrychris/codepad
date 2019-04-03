@@ -12,5 +12,3 @@ $db = new PDO(
     env('DB_USER'),
     env('DB_PASS')
 );
-
-$worker = new GearmanWorker();

@@ -25,10 +25,10 @@ function init(Jailer $jailer, $version, $debug = false)
     $jailer->setDebug($debug);
 
     $php = ['version' => $version];
-    $deploy_path = "/tmp/php-{$php['version']}";
+    $instance = "/tmp/php-{$php['version']}";
 
     try {
-        $jailer->deploy($deploy_path);
+        $jailer->build()->deploy($instance);
     } catch (Exception $e) {
         echo "ERROR: [JAILER] {$e->getMessage()}";
         exit;

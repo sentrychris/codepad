@@ -58,9 +58,6 @@ function init(Compiler $compiler, $version, $debug = false)
 
         if ($debug) {
             echo "Installed {$php['version']} to {$deploy_path}\n";
-        }
-
-        if ($debug) {
             echo "Build Complete\n";
         }
 

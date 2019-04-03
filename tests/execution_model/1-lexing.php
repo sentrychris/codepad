@@ -12,7 +12,7 @@
 <?php
 $code = <<<'code'
 <?php
-$a = 1;
+$x = 42; $y = 24;
 code;
 
 $tokens = token_get_all($code);
