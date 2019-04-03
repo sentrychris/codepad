@@ -1,5 +1,5 @@
 # Cophi
-#### PHP Compiler... Written in PHP.
+#### A PHP Compiler
 
 ##### Roadmap
 
