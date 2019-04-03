@@ -15,7 +15,7 @@ use Exception;
 class Jailer extends Base
 {
 
-    public $jailRoot = '/opt/codepad';
+    public $jailRoot = '/opt/cophi';
     public $jailkitPath = '/usr/sbin';
     public $jailUser = 'jailexec';
     public $webUser = 'www-data';
