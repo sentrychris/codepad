@@ -3,11 +3,13 @@
 
 ##### Roadmap
 
-1. Complete chroot jailer component
-2. Create extension loader
-3. Optimise AST & Opcache
-4. Create Cophi CLI
-5. Package to PHAR
+- Complete compiler component
+- Complete chroot jailer component
+- Create extension loader
+- Optimise AST & Opcache
+- Create Cophi CLI
+- Package to PHAR
+- Regain sanity
 
 ##### Requirements
 - pkg-config
