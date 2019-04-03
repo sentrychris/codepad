@@ -1,8 +1,9 @@
 <?php
-
+// TODO Fix this class up.
 namespace Crowles\Cophi;
 
 use Exception;
+
 /**
  * PHP Jailer.
  *
@@ -36,79 +37,58 @@ class Jailer extends Base
      */
     public function deploy($phpBase)
     {
-        if (!file_exists($this->jailRoot)) {
-            if ($this->isDebug()) {
-                echo "Creating Jail {$this->jailRoot}\n";
-            }
-
-            try {
-                $this->buildJail($this->jailRoot);
-            } catch (Exception $e) {
-                throw new Exception('Failed to create jail: ' . $e->getMessage());
-            }
+        if ($this->isDebug()) {
+            echo "Creating Jail {$this->jailRoot}\n";
         }
 
-        if (!file_exists("{$this->jailRoot}/bin/bash")) {
-            if ($this->isDebug()) {
-                echo "Initializing jail\n";
-            }
-
-            $cmd = "{$this->jailkitPath}/jk_init -j {$this->jailRoot} netutils basicshell jk_lsh openvpn 2>&1";
-            exec($cmd, $init_log, $return);
-
-            if ($return) { // Not 0 = Failure
-                throw new Exception('Failed to initialize jail: ' . implode("\n", $init_log));
-            }
-
-            $passwd = file_get_contents("{$this->jailRoot}/etc/passwd");
-            if (strpos($passwd, $this->jailUser) === false) {
-
-                $passwd = file_get_contents("/etc/passwd");
-                if (strpos($passwd, $this->jailUser) === false) {
-                    if ($this->isDebug()) {
-                        echo "Adding User\n";
-                    }
-
-                    $cmd = "useradd -NMd {$this->jailRoot}/ {$this->jailUser}";
-                    exec($cmd, $user_log, $return);
-
-                    if ($return) { // Not 0 = Failure
-                        throw new Exception('Failed to create user: ' . implode("\n", $user_log));
-                    }
-                }
-
-                if ($this->isDebug()) {
-                    echo "Importing user into jail\n";
-                }
-                $cmd = "{$this->jailkitPath}/jk_jailuser -j {$this->jailRoot} {$this->jailUser}";
-                exec($cmd, $jailuser_log, $return);
-
-                if ($return) { // Not 0 = Failure
-                    throw new Exception('Failed to jail user: ' . implode("\n", $jailuser_log));
-                }
-            }
-
-            if (!file_exists($tmp = "{$this->jailRoot}/tmp")) {
-                if ($this->isDebug()) {
-                    echo "Creating /tmp folder\n";
-                }
-                mkdir($tmp);
-                exec("chown {$this->webUser}:{$this->jailUser} {$tmp}");
-                chmod($tmp, 0775);
-            }
-        }
+        $this->build();
 
         if ($this->isDebug()) {
             echo "Deploying {$phpBase} to {$this->jailRoot}\n";
         }
 
-        $cmd = "{$this->jailkitPath}/jk_cp -j {$this->jailRoot} {$phpBase} 2>&1";
-        exec($cmd, $jail_log, $return);
-
-        if ($return) { // Not 0 = Failure
+        $cmd = "sudo jk_cp -j {$this->jailRoot} {$phpBase} 2>&1";
+        exec($cmd, $jail_log, $status);
+        if ($status > 0) {
             throw new Exception('Failed to install PHP into jail: ' . implode("\n", $jail_log));
         }
 
         return $jail_log;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function build()
+    {
+        $cmd = "sudo jk_init -j {$this->jailRoot} netutils basicshell jk_lsh openvpn 2>&1";
+        exec($cmd, $init_log, $status);
+        if ($status > 0) {
+            throw new Exception('Failed to create jail: ' . implode("\n", $init_log));
+        }
+
+        if ($this->isDebug()) {
+            echo "Initializing jail\n";
+        }
+
+        $cmd = "sudo useradd -NMd {$this->jailRoot}/ {$this->jailUser} 2>&1";
+        exec($cmd, $user_log, $status);
+        if ($status > 0) {
+            throw new Exception('Failed to create user: ' . implode("\n", $user_log));
+        }
+
+        if ($this->isDebug()) {
+            echo "Importing user into jail\n";
+        }
+
+        $cmd = "sudo jk_jailuser -j {$this->jailRoot} {$this->jailUser} 2>&1";
+        exec($cmd, $jailuser_log, $status);
+        if ($status > 0) {
+            throw new Exception('Failed to jail user: ' . implode("\n", $jailuser_log));
+        }
+
+        if (file_exists($tmp = "{$this->jailRoot}/tmp")) {
+            chmod($tmp, 0775);
+        }
     }
 }
