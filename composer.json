@@ -1,15 +1,15 @@
 {
-    "name": "crowles/cophi",
+    "name": "crowles/php-jailer",
     "type": "project",
     "authors": [
         {
             "name": "Chris Rowles",
-            "email": "cmrowles@pm.me"
+            "email": "me@rowles.ch"
         }
     ],
     "autoload": {
         "psr-4": {
-            "Crowles\\Cophi\\": "src"
+            "Crowles\\App\\": "src"
         },
         "files": [
             "src/Helpers/functions.php"

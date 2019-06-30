@@ -1,12 +1,12 @@
 <?php
 /**
- * Cophi PHP Jailer test.
+ * App PHP Jailer test.
  *
  * @author Chris Rowles
- * @package Cophi
+ * @package App
  */
 
-use Crowles\Cophi\Jailer;
+use Crowles\App\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
 

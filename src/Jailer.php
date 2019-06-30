@@ -1,6 +1,6 @@
 <?php
 // TODO Fix this class up.
-namespace Crowles\Cophi;
+namespace Crowles\App;
 
 use Exception;
 
@@ -10,7 +10,7 @@ use Exception;
  * This class is responsible for isolating compiled PHP versions
  * to configured chroot jails.
  *
- * @package Crowles\Cophi
+ * @package Crowles\App
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Jailer extends Base

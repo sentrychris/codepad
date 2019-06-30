@@ -1,21 +1,27 @@
 <?php
 
-namespace Crowles\Cophi;
+namespace Crowles\App;
 
 use Exception;
 
 /**
- * PHP Compiler.
+ * PHP version Compiler.
  *
  * This class is responsible for extracting bzip2 archives obtained
- * via Crowles\Cophi\Downloader::download() and compiling them for
+ * via Crowles\App\Downloader::download() and compiling them for
  * deployment to chroot jails.
  *
- * @package Crowles\Cophi
+ * @package Crowles\App
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Compiler extends Base
 {
+    /** @var $options array */
+    protected $options;
+
+    /** @var $deployPath string */
+    protected $deployPath;
+
     /**
      * Compiler constructor.
      *
@@ -27,26 +33,25 @@ class Compiler extends Base
     }
 
     /**
+     * PHP version compiler.
      *
-     * Version compiler.
-     *
-     * @param $options
-     * @param $archive
      * @param $version
+     * @param $target
+     *
      * @return string
+     *
      * @throws Exception
      */
-    public function compile($options, $archive, $version) : string
+    public function compile($version, $target) : string
     {
-        $out = "/tmp/php-{$version}/";
-        $in = $archive;
+        $this->setDeployPath($version);
 
-        mkdir($out);
-        shell_exec("tar -xvBf {$in} -C {$out} 2>&1");
-        chdir($out);
+        mkdir($this->deployPath);
+        shell_exec("tar -xvBf {$target} -C {$this->deployPath} 2>&1");
+        chdir($this->deployPath);
 
-        while (!file_exists("{$out}/php-{$version}/configure")) {
-            foreach (glob("$out/*", GLOB_ONLYDIR) as $out) {
+        while (!file_exists("{$this->deployPath}/php-{$version}/configure")) {
+            foreach (glob("$this->deployPath/*", GLOB_ONLYDIR) as $out) {
                 if (!in_array($out, array('.', '..'))) {
                     continue 2;
                 }
@@ -54,36 +59,116 @@ class Compiler extends Base
             throw new Exception('Failed to find php build folder');
         }
 
-        chdir($out . "/php-{$version}");
+        chdir($this->deployPath . "/php-{$version}");
 
-        $cmd = "  ./configure \\\n    --" . implode(" \\\n    --", $options) . "\n  2>&1";
+        $cmd = "  ./configure \\\n    --" . implode(" \\\n    --", $this->getOptions()) . "\n  2>&1";
         if ($this->isDebug()) {
             echo "Configuring with: \n{$cmd}\n...";
         }
-        $config_log = shell_exec($cmd);
+        $config = shell_exec($cmd);
 
-        if (strpos($config_log, 'creating main/php_config.h') === false) {
-            throw new Exception("Failed to configure PHP\n\nLine:\n{$cmd}\n\nLog:\n{$config_log}");
+        if (strpos($config, 'creating main/php_config.h') === false) {
+            throw new Exception("Failed to configure PHP\n\nLine:\n{$cmd}\n\nLog:\n{$config}");
         }
 
         if ($this->isDebug()) {
             echo "\nCompiling\n...";
         }
-        $build_log = shell_exec('make install 2>&1');
+        $build = shell_exec('make install 2>&1');
 
-        if (strpos($build_log, 'Installing PHP CGI binary') === false) {
-            throw new Exception("Failed to build PHP\n\nLog:\n{$build_log}");
+        if (strpos($build, 'Installing PHP CGI binary') === false) {
+            throw new Exception("Failed to build PHP\n\nLog:\n{$build}");
+        }
+
+        if ($this->isDebug()) {
+            echo "\nPHP successfully compiled to $this->deployPath\n...";
         }
 
         chdir(dirname(__FILE__));
 
-        return $config_log . "\n" . $build_log;
+        return $config . "\n" . $build;
+    }
+
+    /**
+     * Returns the options for the make configure script.
+     *
+     * @return mixed
+     */
+    public function getOptions()
+    {
+        $deployPath = $this->getDeployPath();
+        if (is_null($this->options)) {
+            // Set default
+           $this->setOptions([
+               "with-config-file-path=$deployPath/etc",
+               "prefix=$deployPath",
+               "with-layout=GNU",
+               "enable-mbstring",
+               "enable-calendar",
+               "enable-bcmath",
+               "enable-pdo",
+               "enable-sockets",
+               "enable-soap",
+               "with-curl",
+               "with-gd",
+               "with-jpeg-dir",
+               "with-png-dir",
+               "with-zlib",
+               "with-tidy",
+               "with-mysqli",
+               "with-pdo-mysql",
+               "with-pdo-sqlite",
+               "with-gettext",
+               "with-openssl"
+           ]);
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * Sets the options for the make configure script.
+     *
+     * @param mixed $options
+     *
+     * @return Compiler
+     */
+    public function setOptions($options): Compiler
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
+    /**
+     * Returns the instance deploy path.
+     *
+     * @return mixed
+     */
+    public function getDeployPath()
+    {
+        return $this->deployPath;
+    }
+
+    /**
+     * Sets the instance deploy path.
+     *
+     * @param mixed $deployPath
+     *
+     * @return Compiler
+     */
+    public function setDeployPath($deployPath): Compiler
+    {
+        $this->deployPath = "/tmp/php-$deployPath";
+
+        return $this;
     }
 
     /**
      * Remove utility.
      *
      * @param $dir
+     *
      * @return void
      */
     protected function remove($dir) : void

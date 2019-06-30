@@ -1,14 +1,14 @@
 <?php
 
-namespace Crowles\Cophi;
+namespace Crowles\App;
 
 /**
  * Base.
  *
- * This is the base class for Cophi, all classes must
+ * This is the base class for App, all classes must
  * extend this class.
  *
- * @package Crowles\Cophi
+ * @package Crowles\App
  */
 class Base
 {
