@@ -1,5 +1,7 @@
-# Cophi
-#### A PHP Compiler
+[WIP]
+
+This is a tool for creating jailed PHP instances.
+
 ##### Requirements
 - pkg-config
 - libjpeg-dev
