@@ -47,7 +47,7 @@ class Compiler extends Base
         $this->setDeployPath($version);
 
         mkdir($this->deployPath);
-        shell_exec("tar -xvBf {$target} -C {$this->deployPath} 2>&1");
+        shell_exec("tar -xvBf $target -C $this->deployPath 2>&1");
         chdir($this->deployPath);
 
         while (!file_exists("{$this->deployPath}/php-{$version}/configure")) {
@@ -59,16 +59,16 @@ class Compiler extends Base
             throw new Exception('Failed to find php build folder');
         }
 
-        chdir($this->deployPath . "/php-{$version}");
+        chdir($this->deployPath . "/php-$version");
 
         $cmd = "  ./configure \\\n    --" . implode(" \\\n    --", $this->getOptions()) . "\n  2>&1";
         if ($this->isDebug()) {
-            echo "Configuring with: \n{$cmd}\n...";
+            echo "Configuring with: \n$cmd\n...";
         }
         $config = shell_exec($cmd);
 
         if (strpos($config, 'creating main/php_config.h') === false) {
-            throw new Exception("Failed to configure PHP\n\nLine:\n{$cmd}\n\nLog:\n{$config}");
+            throw new Exception("Failed to configure PHP\n\nLine:\n$cmd\n\nLog:\n$config");
         }
 
         if ($this->isDebug()) {

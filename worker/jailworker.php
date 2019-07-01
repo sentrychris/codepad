@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/../config/bootstrap.php';
+
 const MAX_RUNTIME_SECONDS = 5;
 
 if (posix_geteuid() !== 0) {
