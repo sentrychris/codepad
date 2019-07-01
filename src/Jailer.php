@@ -2,8 +2,6 @@
 
 namespace Versyx\Jail;
 
-use Exception;
-
 /**
  * PHP Jailer.
  *
@@ -15,8 +13,19 @@ use Exception;
  */
 class Jailer extends Base
 {
+
+    /** @var string $user */
+    protected $user = "jailexec";
+
+    /** @var string $root */
+    protected $root = "/opt/phpjail";
+
+    /** @var array $fs */
+    protected $fs = ['/bin', '/etc', '/dev', '/lib', '/lib64', '/usr'];
+
     /**
      * Jailer constructor.
+     *
      * @param $debug
      */
     public function __construct($debug = null)
@@ -25,14 +34,40 @@ class Jailer extends Base
     }
 
     /**
-     *
-     */
-    public function deploy($instance)
-    {}
-
-    /**
-     *
+     * Build jail.
      */
     public function build()
-    {}
+    {
+        if (!file_exists($this->root)) {
+            if ($this->isDebug()) {
+                echo "Creating jail...";
+            }
+            mkdir($this->root);
+        }
+
+        foreach ($this->fs as $device) {
+            if (!file_exists($this->root.$device)) {
+                if ($this->isDebug()) {
+                    echo "Creating filesystem...";
+                }
+                mkdir($this->root.$device);
+            }
+
+            echo "Mounting filesystem...";
+            $this->mount(["bind", "ro"], $device, $this->root.$device);
+        }
+    }
+
+    /**
+     * Mounts filesystem.
+     *
+     * @param $opt
+     * @param $device
+     * @param $point
+     */
+    protected function mount($opt, $device, $point)
+    {
+        $opt = implode(",", $opt);
+        shell_exec("mount -o $opt $device $point 2>&1");
+    }
 }

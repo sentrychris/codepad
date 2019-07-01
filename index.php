@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-//header("content-type: text/plain;charset=utf8");
+require __DIR__ . '/config/bootstrap.php';
 
-if (isBase64($_POST['code'])) {
+if (isBase64($_POST['code']) && isBase64($_POST['ver'])) {
     $raw = (string)(base64_decode($_POST['code'] ?? ''));
-    $ver = (string)(base64_decode($_POST['version'] ?? ''));
+    $ver = (string)(base64_decode($_POST['ver'] ?? ''));
 } else {
     $raw = (string)($_POST['code'] ?? '');
-    $ver = (string)($_POST['version'] ?? '');
+    $ver = (string)($_POST['ver'] ?? '');
 }
 
 $pipes = [];

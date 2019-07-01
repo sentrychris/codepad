@@ -15,9 +15,9 @@ init(new Downloader($debug), new Compiler($debug), $version);
  *
  * @param Downloader $downloader
  * @param Compiler $compiler
- * @param $version
+ * @param string $version
  */
-function init(Downloader $downloader, Compiler $compiler, $version)
+function init(Downloader $downloader, Compiler $compiler, string $version)
 {
     try {
         $php = $downloader->setVersion($version)->download();
