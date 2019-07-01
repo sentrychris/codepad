@@ -1,6 +1,6 @@
 <?php
 
-namespace Crowles\App;
+namespace Versyx\Jail;
 
 use Exception;
 
@@ -8,10 +8,10 @@ use Exception;
  * PHP version Compiler.
  *
  * This class is responsible for extracting bzip2 archives obtained
- * via Crowles\App\Downloader::download() and compiling them for
+ * via Versyx\Jail\Downloader::download() and compiling them for
  * deployment to chroot jails.
  *
- * @package Crowles\App
+ * @package Versyx\Jail
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Compiler extends Base

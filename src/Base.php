@@ -1,14 +1,14 @@
 <?php
 
-namespace Crowles\App;
+namespace Versyx\Jail;
 
 /**
  * Base.
  *
- * This is the base class for App, all classes must
+ * This is the base class for the app, all classes must
  * extend this class.
  *
- * @package Crowles\App
+ * @package Versyx\Jail
  */
 class Base
 {
@@ -20,6 +20,7 @@ class Base
 
     /**
      * Base constructor.
+     *
      * @param $debug
      */
     public function __construct($debug)
@@ -30,6 +31,8 @@ class Base
     }
 
     /**
+     * Check debug status.
+     *
      * @return mixed
      */
     public function isDebug()
@@ -38,6 +41,8 @@ class Base
     }
 
     /**
+     * Set debug status.
+     *
      * @param mixed $debug
      */
     public function setDebug($debug): void

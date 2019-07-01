@@ -1,6 +1,6 @@
 <?php
 
-namespace Crowles\App;
+namespace Versyx\Jail;
 
 use Exception;
 
@@ -10,7 +10,7 @@ use Exception;
  * This class is responsible for downloading bzip2 archives for
  * specified PHP versions.
  *
- * @package Crowles\App
+ * @package Versyx\Jail
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Downloader extends Base

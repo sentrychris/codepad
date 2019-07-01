@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Crowles\\App\\": "src"
+            "Versyx\\Jail\\": "src"
         },
         "files": [
             "src/Helpers/functions.php"
@@ -23,6 +23,7 @@
         "ext-bz2": "*",
         "ext-curl": "*",
         "vlucas/phpdotenv": "^3.3",
-        "ext-parle": "*"
+        "ext-parle": "*",
+        "ext-posix": "*"
     }
 }

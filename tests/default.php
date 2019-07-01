@@ -1,12 +1,12 @@
 <?php
 
-use Crowles\App\Downloader;
-use Crowles\App\Compiler;
+use Versyx\Jail\Downloader;
+use Versyx\Jail\Compiler;
 
 require __DIR__ . '/../config/bootstrap.php';
 
 $debug = true;
-$version = "7.1.30";
+$version = "7.3.6";
 init(new Downloader($debug), new Compiler($debug), $version);
 
 /**
