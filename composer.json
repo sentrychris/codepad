@@ -1,5 +1,5 @@
 {
-    "name": "crowles/php-jailer",
+    "name": "versyx/jailer",
     "type": "project",
     "authors": [
         {
@@ -19,11 +19,9 @@
         "ext-dom": "*",
         "ext-json": "*",
         "ext-pdo": "*",
-        "ext-gearman": "*",
         "ext-bz2": "*",
         "ext-curl": "*",
-        "vlucas/phpdotenv": "^3.3",
-        "ext-parle": "*",
-        "ext-posix": "*"
+        "ext-posix": "*",
+        "vlucas/phpdotenv": "^3.3"
     }
 }
