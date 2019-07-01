@@ -14,16 +14,10 @@ if (!is_string($code)) {
     throw new \RuntimeException ('failed to read the code from stdin! (stream_get_contents failed)');
 }
 
-$file = tempnam(__DIR__, "unsafe");
+$file = tempnam("/opt/phpjail", "unsafe");
 if (!is_string($file)) {
     throw new \RuntimeException ('tempnam failed!');
 }
-
-register_shutdown_function(function () use (&$file) {
-    if (!unlink($file)) {
-        throw new \RuntimeException ('failed to clean up the file! (unlink failed!?)');
-    }
-});
 
 if (strlen($code) !== file_put_contents($file, $code)) {
     throw new \RuntimeException ('failed to write the code to disk! (out of diskspace?)');
@@ -35,10 +29,10 @@ if (!chmod($file, 0444)) {
 
 $starttime = microtime(true);
 $unused = [];
-$ph = proc_open('chroot --userspec=nobody /jail /usr/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
+$ph = proc_open('chroot /opt/phpjail /php-7.3.6/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
 $terminated = false;
 while (($status = proc_get_status($ph)) ['running']) {
-    usleep(100 * 1000); // 100 ms
+    usleep(100 * 1000);
     if (!$terminated && microtime(true) - $starttime > MAX_RUNTIME_SECONDS) {
         $terminated = true;
         echo 'max runtime reached (' . MAX_RUNTIME_SECONDS . ' seconds), terminating...';
@@ -50,7 +44,7 @@ proc_close($ph);
 
 function pKill(int $pid)
 {
-    system("kill -s STOP " . $pid); // stop it first, so it can't make any more children
+    system("kill -s STOP " . $pid);
     $children = shell_exec('pgrep -P ' . $pid);
 
     if (is_string($children)) {
@@ -59,7 +53,7 @@ function pKill(int $pid)
 
     if (!empty ($children)) {
         $children = array_filter(array_map('trim', explode("\n", $children)), function ($in) {
-            return false !== filter_var($in, FILTER_VALIDATE_INT); // shouldn't be necessary, but just to be safe..
+            return false !== filter_var($in, FILTER_VALIDATE_INT);
         });
         foreach ($children as $child) {
             pKill(( int )$child);
