@@ -15,7 +15,7 @@
 ## Quick install
 
 ```bash
-$ ./install 7.1.30
+$ ./install <version>
 ```
 
 ## Downloading & Compiling
