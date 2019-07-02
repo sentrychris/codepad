@@ -1,7 +1,5 @@
 [WIP]
 
-This is a tool for downloading, compiling and deploying PHP versions to chroot jails.
-
 ## Requirements
 - pkg-config
 - libjpeg-dev
