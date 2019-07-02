@@ -87,8 +87,8 @@ mount -o bind,ro /tmp/php-7.2.19 /opt/phpjail/php-7.2.19
 
 ### Enabling the worker
 
-You'll need to allow www-data to run the worker script as a privileged user, add the following entries to
- `/etc/sudoers`:
+You'll need to allow www-data to run the worker script as a privileged user, add entries for each compiled version to
+ `/etc/sudoers` like so:
 
 ```
 www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/php-jailer/http/worker.php 7.3.6
