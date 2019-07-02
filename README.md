@@ -52,4 +52,4 @@ Complete the jailer module.
 
 ## Example Deployment
 
-![example deployment](https://rowles.ch/images/example.jpg)
+![example deployment](https://rowles.ch/images/codepad.jpg)
