@@ -15,7 +15,7 @@
 $ ./install 7.1.30
 ```
 
-## Example Code
+## Downloading & Compiling
 
 ```php
 <?php
