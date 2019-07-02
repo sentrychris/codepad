@@ -135,4 +135,6 @@ proc_close($ph);
 
 ## Example Deployment
 
+Tested on Ubuntu 16.04 using Apache 2.4 and PHP 7.2, 7.3
+
 ![example deployment](https://rowles.ch/images/codepad.jpg)
