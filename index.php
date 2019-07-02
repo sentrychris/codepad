@@ -1,55 +1,75 @@
-<?php
-
-declare(strict_types=1);
-
-require __DIR__ . '/config/bootstrap.php';
-
-if (isBase64($_POST['code']) && isBase64($_POST['ver'])) {
-    $raw = (string)(base64_decode($_POST['code'] ?? ''));
-    $ver = (string)(base64_decode($_POST['ver'] ?? ''));
-} else {
-    $raw = (string)($_POST['code'] ?? '');
-    $ver = (string)($_POST['ver'] ?? '');
-}
-
-$banned = [
-    "include",
-    "require",
-    "exec",
-    "eval",
-    "assert",
-    "system",
-    "passthru",
-    "mkdir",
-    "chdir",
-    "chown",
-    "file_",
-];
-
-// TODO improve this!
-if(str_replace($banned, '', $raw) != $raw) {
-    die("Not Allowed!");
-}
-
-$pipes = [];
-$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/php-jailer/worker/jailworker.php", [
-    0 => ["pipe", "rb"],
-    1 => ["pipe", "wb"],
-    2 => ["pipe", "wb"]
-], $pipes);
-
-fwrite($pipes [0], $raw);
-fclose($pipes [0]);
-while (($status = proc_get_status($proc)) ['running']) {
-    usleep(100 * 1000); // 100 ms
-    echo stream_get_contents($pipes [2]);
-    echo stream_get_contents($pipes [1]);
-}
-
-echo stream_get_contents($pipes[2]);
-fclose($pipes[2]);
-
-echo stream_get_contents($pipes[1]);
-fclose($pipes[1]);
-
-proc_close($proc);
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Codepad</title>
+</head>
+<body>
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Versyx Codepad</h1>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+            <form id="codepad">
+                <div class="form-group">
+                    <label class="form-check-label"> PHP Version:
+                        <select class="form-control" name="ver" id="ver">
+                            <option value="7.3.6">7.3.6</option>
+                            <option value="7.2.19">7.2.19</option>
+                            <option value="7.1.30">7.1.30</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="code">Code:</label>
+                    <textarea class="form-control" name="code" id="code" cols="30" rows="10"></textarea>
+                </div>
+                <button class="btn btn-success" type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div id="result" class="h-100">
+                <div class="form-group">
+                    <label for="data">Result:</label>
+                    <pre class="form-control h-100" id="data"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#codepad').submit((e) => {
+        e.preventDefault();
+        let data = {
+            code: btoa($('#code').val()),
+            ver: btoa($('#ver').val())
+        };
+        let res = $('#result pre');
+        console.log(data);
+        res.empty();
+        $.ajax({
+            type: "POST",
+            url: "/http/manager.php",
+            data: data,
+            success: (response) => {
+                res.append(response);
+            }
+        })
+    })
+</script>
+</body>
+</html>
