@@ -29,20 +29,10 @@ $debug = true;
 $version = "7.1.30";
 init(new Downloader($debug), new Compiler($debug), $version);
 
-/**
- *
- * init test method.
- *
- * @param Downloader $downloader
- * @param Compiler $compiler
- * @param string $version
- */
 function init(Downloader $downloader, Compiler $compiler, string $version)
 {
     try {
         $php = $downloader->setVersion($version)->download();
-        // If you already have the archive, you can call the compiler
-        // directly, e.g. $compiler->compile("7.3.3", "/tmp/php-7.3.3");
         $compiler->compile($php->getVersion(), $php->getTarget());
     } catch (\Exception $e) {
         echo $e->getMessage();
