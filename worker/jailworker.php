@@ -42,5 +42,4 @@ while (($status = proc_get_status($ph)) ['running']) {
     }
 }
 
-echo "\nexit status: " . $status ['exitcode'];
 proc_close($ph);

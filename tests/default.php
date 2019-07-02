@@ -6,7 +6,7 @@ use Versyx\Jail\Compiler;
 require __DIR__ . '/../config/bootstrap.php';
 
 $debug = true;
-$version = "7.1.30";
+$version = "7.0.33";
 init(new Downloader($debug), new Compiler($debug), $version);
 
 /**

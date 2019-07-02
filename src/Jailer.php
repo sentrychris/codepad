@@ -13,10 +13,6 @@ namespace Versyx\Jail;
  */
 class Jailer extends Base
 {
-
-    /** @var string $user */
-    protected $user = "jailexec";
-
     /** @var string $root */
     protected $root = "/opt/phpjail";
 
@@ -35,9 +31,13 @@ class Jailer extends Base
 
     /**
      * Build jail.
+     *
+     * @param $version
      */
-    public function build()
+    public function build($version)
     {
+        $this->addDevice("/php-$version");
+
         if (!file_exists($this->root)) {
             if ($this->isDebug()) {
                 echo "Creating jail...";
@@ -69,5 +69,21 @@ class Jailer extends Base
     {
         $opt = implode(",", $opt);
         shell_exec("mount -o $opt $device $point 2>&1");
+    }
+
+    /**
+     * @return array
+     */
+    public function getDevice($device): array
+    {
+        return $this->fs[$device];
+    }
+
+    /**
+     * @param string $device
+     */
+    public function addDevice(string $device): void
+    {
+        $this->fs[] = $device;
     }
 }

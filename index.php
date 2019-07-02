@@ -12,6 +12,25 @@ if (isBase64($_POST['code']) && isBase64($_POST['ver'])) {
     $ver = (string)($_POST['ver'] ?? '');
 }
 
+$banned = [
+    "include",
+    "require",
+    "exec",
+    "eval",
+    "assert",
+    "system",
+    "passthru",
+    "mkdir",
+    "chdir",
+    "chown",
+    "file_",
+];
+
+// TODO improve this!
+if(str_replace($banned, '', $raw) != $raw) {
+    die("Not Allowed!");
+}
+
 $pipes = [];
 $proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/php-jailer/worker/jailworker.php", [
     0 => ["pipe", "rb"],
