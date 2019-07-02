@@ -31,6 +31,7 @@
                             <option value="7.3.6">7.3.6</option>
                             <option value="7.2.19">7.2.19</option>
                             <option value="7.1.30">7.1.30</option>
+                            <option value="7.0.33">7.0.33</option>
                         </select>
                     </label>
                 </div>

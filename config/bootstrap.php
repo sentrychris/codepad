@@ -6,4 +6,4 @@ session_start();
 error_reporting(E_ALL & ~E_NOTICE);
 
 $dotenv = Dotenv\Dotenv::create(__DIR__ . '/../');
-$dotenv->load();
+$dotenv->overload();

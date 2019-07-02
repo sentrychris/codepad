@@ -31,7 +31,7 @@ if (!chmod($file, 0444)) {
 
 $starttime = microtime(true);
 $unused = [];
-$ph = proc_open('chroot /opt/phpjail /php-7.3.6/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
+$ph = proc_open('chroot /opt/phpjail /php-' . $argv[1] .'/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
 $terminated = false;
 while (($status = proc_get_status($ph)) ['running']) {
     usleep(100 * 1000);
