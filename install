@@ -1,0 +1,34 @@
+#!/usr/bin/env php
+
+<?php
+
+use Versyx\Jail\Downloader;
+use Versyx\Jail\Compiler;
+
+require __DIR__ . '/config/bootstrap.php';
+
+if(!isset($argv[1])) {
+    die("You must specify a PHP version.");
+}
+
+$version = $argv[1];
+$debug = $argv[2];
+init(new Downloader($debug), new Compiler($debug), $version);
+
+/**
+ *
+ * init test method.
+ *
+ * @param Downloader $downloader
+ * @param Compiler $compiler
+ * @param string $version
+ */
+function init(Downloader $downloader, Compiler $compiler, string $version)
+{
+    try {
+        $php = $downloader->setVersion($version)->download();
+        $compiler->compile($php->getVersion(), $php->getTarget());
+    } catch (\Exception $e) {
+        echo $e->getMessage();
+    }
+}
