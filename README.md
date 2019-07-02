@@ -104,9 +104,41 @@ www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/php-jaile
 
 This will restrict `www-data`'s sudo privileges to only running the worker.
 
-The worker will execute the script which is saved to a temporary file from STDIN, it
-then executes the file using the selected PHP version instance which is chrooted to
-`/opt/phpjail` as user `nobody`.
+### How it Works
+
+The PHP code and version is base64 encoded and submitted to `http/manager.php`, the manager then 
+base64 decodes the data and runs a check on the code input against disabled functions, if the check
+comes back clean, a new process is created with stream resources:
+
+```php
+$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/php-jailer/http/worker.php $ver", [
+    0 => ["pipe", "rb"],
+    1 => ["pipe", "wb"],
+    2 => ["pipe", "wb"]
+], $pipes);
+```
+
+The PHP code is passed to `http/worker.php` from the manager via STDIN, the worker then creates a temporary file in
+`/opt/phpjail`, sets its permissions to `0444` and then executes the file using the selected PHP version
+instance, which is chrooted to `/opt/phpjail` as user `nobody`. If the code takes longer than five seconds to execute, 
+the process will terminate.
+
+```php
+$starttime = microtime(true);
+$unused = [];
+$ph = proc_open('chroot --userspec=nobody /opt/phpjail /php-' . $argv[1] .'/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
+$terminated = false;
+while (($status = proc_get_status($ph)) ['running']) {
+    usleep(100 * 1000);
+    if (!$terminated && microtime(true) - $starttime > MAX_RUNTIME_SECONDS) {
+        $terminated = true;
+        echo 'max runtime reached (' . MAX_RUNTIME_SECONDS . ' seconds), terminating...';
+        pKill($status['pid']);
+    }
+}
+
+proc_close($ph);
+```
 
 ## Example Deployment
 
