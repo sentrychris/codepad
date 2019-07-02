@@ -1,13 +1,16 @@
 [WIP]
 
-## Requirements
+## System Requirements
+- build-essential 
 - pkg-config
-- libjpeg-dev
-- libpng-dev
 - libcurl4-openssl-dev
 - libxml2-dev
 - libtidy-dev
-- php*.*-dev
+
+#### Optional
+
+- bison
+- re2c
 
 ## Quick install
 
