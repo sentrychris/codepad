@@ -1,5 +1,3 @@
-[WIP]
-
 ## System Requirements
 - build-essential 
 - pkg-config
@@ -15,7 +13,7 @@
 ## Quick install
 
 ```bash
-$ ./install <version>
+$ ./install <(int)version> <(bool)debug>
 ```
 
 ## Downloading & Compiling
