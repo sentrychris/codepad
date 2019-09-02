@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Jail;
+namespace Versyx\Codepad;
 
 /**
  * PHP Jailer.
@@ -8,7 +8,7 @@ namespace Versyx\Jail;
  * This class is responsible for isolating compiled PHP versions
  * to configured chroot jails.
  *
- * @package Versyx\Jail
+ * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Jailer extends Base

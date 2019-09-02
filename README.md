@@ -13,7 +13,7 @@
 ## Quick install
 
 ```bash
-$ ./install <(int)version> <(bool)debug>
+$ php install <(int)version> <(bool)debug>
 ```
 
 ## Downloading & Compiling
@@ -21,8 +21,8 @@ $ ./install <(int)version> <(bool)debug>
 ```php
 <?php
 
-use Versyx\Jail\Downloader;
-use Versyx\Jail\Compiler;
+use Versyx\Codepad\Downloader;
+use Versyx\Codepad\Compiler;
 
 require __DIR__ . '/../config/bootstrap.php';
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Jail;
+namespace Versyx\Codepad;
 
 use Exception;
 
@@ -8,10 +8,10 @@ use Exception;
  * PHP version Compiler.
  *
  * This class is responsible for extracting bzip2 archives obtained
- * via Versyx\Jail\Downloader::download() and compiling them for
+ * via Versyx\Codepad\Downloader::download() and compiling them for
  * deployment to chroot jails.
  *
- * @package Versyx\Jail
+ * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Compiler extends Base

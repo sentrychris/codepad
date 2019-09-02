@@ -9,7 +9,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Versyx\\Jail\\": "src"
+            "Versyx\\Codepad\\": "src"
         },
         "files": [
             "src/Helpers/functions.php"

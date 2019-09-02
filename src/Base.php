@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Jail;
+namespace Versyx\Codepad;
 
 /**
  * Base.
@@ -8,7 +8,7 @@ namespace Versyx\Jail;
  * This is the base class for the app, all classes must
  * extend this class.
  *
- * @package Versyx\Jail
+ * @package Versyx\Codepad
  */
 class Base
 {

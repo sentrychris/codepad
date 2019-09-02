@@ -44,11 +44,11 @@ function pKill(int $pid)
 /**
  * Check if a string seems base64-encoded.
  *
- * @param $s
+ * @param string $string
  *
  * @return bool
  */
-function isBase64($s)
+function isBase64(string $string)
 {
-    return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $s);
+    return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string);
 }

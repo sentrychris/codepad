@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Jail;
+namespace Versyx\Codepad;
 
 use Exception;
 
@@ -10,7 +10,7 @@ use Exception;
  * This class is responsible for downloading bzip2 archives for
  * specified PHP versions.
  *
- * @package Versyx\Jail
+ * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Downloader extends Base
@@ -41,7 +41,7 @@ class Downloader extends Base
      *
      * @throws Exception
      */
-    public function download()
+    public function download() : Downloader
     {
         $file = "php-$this->version.tar.bz2";
         $this->setTarget(@tempnam(sys_get_temp_dir() . '/' . $file, "php"));

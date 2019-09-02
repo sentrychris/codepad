@@ -2,8 +2,8 @@
 
 <?php
 
-use Versyx\Jail\Downloader;
-use Versyx\Jail\Compiler;
+use Versyx\Codepad\Downloader;
+use Versyx\Codepad\Compiler;
 
 require __DIR__ . '/config/bootstrap.php';
 
