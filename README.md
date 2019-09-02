@@ -89,8 +89,8 @@ You'll need to allow www-data to run the worker script as a privileged user, add
  `/etc/sudoers` like so:
 
 ```
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/php-jailer/http/worker.php 7.3.6
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/php-jailer/http/worker.php 7.0.33
+www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/http/worker.php 7.3.6
+www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/http/worker.php 7.0.33
 ```
 
 This will restrict `www-data`'s sudo privileges to only running the worker.
@@ -102,7 +102,7 @@ base64 decodes the data and runs a check on the code input against disabled func
 comes back clean, a new process is created with stream resources:
 
 ```php
-$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/php-jailer/http/worker.php $ver", [
+$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME) . "/http/worker.php $ver", [
     0 => ["pipe", "rb"],
     1 => ["pipe", "wb"],
     2 => ["pipe", "wb"]
@@ -132,7 +132,5 @@ proc_close($ph);
 ```
 
 ## Example Deployment
-
-Tested on Ubuntu 16.04 using Apache 2.4 and PHP 7.2, 7.3
 
 ![example deployment](https://rowles.ch/images/codepad.jpg)
