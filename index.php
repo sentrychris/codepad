@@ -16,22 +16,16 @@
 <body>
 <div class="container my-4">
     <div class="row">
-        <div class="col-md-12">
-            <h1>Versyx Codepad</h1>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="row">
         <div class="col-md-6 col-xs-12">
             <form id="codepad">
                 <div class="form-group">
                     <label class="form-check-label"> PHP Version:
                         <select class="form-control" name="ver" id="ver">
-                            <option value="7.3.6">7.3.6</option>
+                            <option value="7.3.6">7.3.60</option>
                             <option value="7.2.19">7.2.19</option>
                             <option value="7.1.30">7.1.30</option>
                             <option value="7.0.33">7.0.33</option>
+                            <option value="5.6.40">5.6.40</option>
                         </select>
                     </label>
                 </div>

@@ -32,7 +32,7 @@ if(str_replace($banned, '', $raw) != $raw) {
 }
 
 $pipes = [];
-$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/php-jailer/http/worker.php $ver", [
+$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME") . "/http/worker.php $ver", [
     0 => ["pipe", "rb"],
     1 => ["pipe", "wb"],
     2 => ["pipe", "wb"]

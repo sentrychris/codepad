@@ -44,7 +44,7 @@ class Downloader extends Base
     public function download()
     {
         $file = "php-$this->version.tar.bz2";
-        $this->setTarget(tempnam(sys_get_temp_dir() . '/' . $file, "php"));
+        $this->setTarget(@tempnam(sys_get_temp_dir() . '/' . $file, "php"));
 
         if (!preg_replace('/\W+|php/', '', $this->version)) {
             throw new Exception('Invalid Version');
