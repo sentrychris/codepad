@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/../config/bootstrap.php';
+require __DIR__.'/../config/bootstrap.php';
 
 const MAX_RUNTIME_SECONDS = 5;
 
 if (posix_geteuid() !== 0) {
-    fprintf(STDERR, "this script must run as root");
+    fprintf(STDERR, 'this script must run as root');
     die;
 }
 
@@ -16,7 +16,7 @@ if (!is_string($code)) {
     throw new \RuntimeException('failed to read the code from stdin! (stream_get_contents failed)');
 }
 
-$file = tempnam("/opt/phpjail", "unsafe");
+$file = tempnam('/opt/phpjail', 'unsafe');
 if (!is_string($file)) {
     throw new \RuntimeException('tempnam failed!');
 }
@@ -31,14 +31,14 @@ if (!chmod($file, 0444)) {
 
 $starttime = microtime(true);
 $unused = [];
-$ph = proc_open('chroot --userspec=nobody /opt/phpjail /php-' . $argv[1] .'/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
+$ph = proc_open('chroot --userspec=nobody /opt/phpjail /php-'.$argv[1].'/bin/php '.escapeshellarg(basename($file)), $unused, $unused);
 $terminated = false;
-while (($status = proc_get_status($ph)) ['running']) {
+while (($status = proc_get_status($ph))['running']) {
     usleep(100 * 1000);
     if (!$terminated && microtime(true) - $starttime > MAX_RUNTIME_SECONDS) {
         $terminated = true;
-        echo 'max runtime reached (' . MAX_RUNTIME_SECONDS . ' seconds), terminating...';
-        pKill((int)($status ['pid']));
+        echo 'max runtime reached ('.MAX_RUNTIME_SECONDS.' seconds), terminating...';
+        pKill((int) ($status['pid']));
     }
 }
 

@@ -10,13 +10,12 @@ use Exception;
  * This class is responsible for downloading bzip2 archives for
  * specified PHP versions.
  *
- * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Downloader extends Base
 {
     /** @var $url string */
-    protected $url = "https://www.php.net/distributions/";
+    protected $url = 'https://www.php.net/distributions/';
 
     /** @var $version string */
     protected $version;
@@ -37,14 +36,14 @@ class Downloader extends Base
     /**
      * PHP Version downloader.
      *
-     * @return Downloader
-     *
      * @throws Exception
+     *
+     * @return Downloader
      */
-    public function download() : Downloader
+    public function download() : self
     {
         $file = "php-$this->version.tar.bz2";
-        $this->setTarget(@tempnam(sys_get_temp_dir() . '/' . $file, "php"));
+        $this->setTarget(@tempnam(sys_get_temp_dir().'/'.$file, 'php'));
 
         if (!preg_replace('/\W+|php/', '', $this->version)) {
             throw new Exception('Invalid Version');
@@ -54,21 +53,21 @@ class Downloader extends Base
             echo "Fetching $file from $this->url\n...";
         }
 
-        $resource = fopen($this->target, "w");
+        $resource = fopen($this->target, 'w');
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url.$file);
         curl_setopt($ch, CURLOPT_FAILONERROR, true);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER,true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_FILE, $resource);
         $result = curl_exec($ch);
-        if(!$result) {
-            echo "Error :- ".curl_error($ch);
+        if (!$result) {
+            echo 'Error :- '.curl_error($ch);
         } else {
             echo "$file successfully downloaded from $this->url";
         }
@@ -98,7 +97,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setVersion($version) : Downloader
+    public function setVersion($version) : self
     {
         $this->version = $version;
 
@@ -122,7 +121,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setUrl($url) : Downloader
+    public function setUrl($url) : self
     {
         $this->url = $url;
 
@@ -146,7 +145,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setTarget($target) : Downloader
+    public function setTarget($target) : self
     {
         $this->target = $target;
 

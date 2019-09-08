@@ -7,14 +7,11 @@ namespace Versyx\Codepad;
  *
  * This is the base class for the app, all classes must
  * extend this class.
- *
- * @package Versyx\Codepad
  */
 class Base
 {
-
     /**
-     * @var bool $debug
+     * @var bool
      */
     protected $debug;
 
@@ -49,5 +46,4 @@ class Base
     {
         $this->debug = $debug;
     }
-
 }
