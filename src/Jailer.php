@@ -8,13 +8,12 @@ namespace Versyx\Codepad;
  * This class is responsible for isolating compiled PHP versions
  * to configured chroot jails.
  *
- * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Jailer extends Base
 {
     /** @var string $root */
-    protected $root = "/opt/phpjail";
+    protected $root = '/opt/phpjail';
 
     /** @var array $fs */
     protected $fs = ['/bin', '/etc', '/dev', '/lib', '/lib64', '/usr'];
@@ -40,7 +39,7 @@ class Jailer extends Base
 
         if (!file_exists($this->root)) {
             if ($this->isDebug()) {
-                echo "Creating jail...";
+                echo 'Creating jail...';
             }
             mkdir($this->root);
         }
@@ -48,13 +47,13 @@ class Jailer extends Base
         foreach ($this->fs as $device) {
             if (!file_exists($this->root.$device)) {
                 if ($this->isDebug()) {
-                    echo "Creating filesystem...";
+                    echo 'Creating filesystem...';
                 }
                 mkdir($this->root.$device);
             }
 
-            echo "Mounting filesystem...";
-            $this->mount(["bind", "ro"], $device, $this->root.$device);
+            echo 'Mounting filesystem...';
+            $this->mount(['bind', 'ro'], $device, $this->root.$device);
         }
     }
 
@@ -67,7 +66,7 @@ class Jailer extends Base
      */
     protected function mount($opt, $device, $point)
     {
-        $opt = implode(",", $opt);
+        $opt = implode(',', $opt);
         shell_exec("mount -o $opt $device $point 2>&1");
     }
 

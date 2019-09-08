@@ -11,7 +11,6 @@ use Exception;
  * via Versyx\Codepad\Downloader::download() and compiling them for
  * deployment to chroot jails.
  *
- * @package Versyx\Codepad
  * @author Chris Rowles <cmrowles@pm.me>
  */
 class Compiler extends Base
@@ -38,9 +37,9 @@ class Compiler extends Base
      * @param $version
      * @param $target
      *
-     * @return string
-     *
      * @throws Exception
+     *
+     * @return string
      */
     public function compile($version, $target) : string
     {
@@ -52,16 +51,17 @@ class Compiler extends Base
 
         while (!file_exists("{$this->deployPath}/php-{$version}/configure")) {
             foreach (glob("$this->deployPath/*", GLOB_ONLYDIR) as $out) {
-                if (!in_array($out, array('.', '..'))) {
+                if (!in_array($out, ['.', '..'])) {
                     continue 2;
                 }
             }
+
             throw new Exception('Failed to find php build folder');
         }
 
-        chdir($this->deployPath . "/php-$version");
+        chdir($this->deployPath."/php-$version");
 
-        $cmd = "  ./configure \\\n    --" . implode(" \\\n    --", $this->getOptions()) . "\n  2>&1";
+        $cmd = "  ./configure \\\n    --".implode(" \\\n    --", $this->getOptions())."\n  2>&1";
         if ($this->isDebug()) {
             echo "Configuring with: \n$cmd\n...";
         }
@@ -86,7 +86,7 @@ class Compiler extends Base
 
         chdir(dirname(__FILE__));
 
-        return $config . "\n" . $build;
+        return $config."\n".$build;
     }
 
     /**
@@ -99,27 +99,27 @@ class Compiler extends Base
         $deployPath = $this->getDeployPath();
         if (is_null($this->options)) {
             // Set default
-           $this->setOptions([
+            $this->setOptions([
                "with-config-file-path=$deployPath/etc",
                "prefix=$deployPath",
-               "with-layout=GNU",
-               "enable-mbstring",
-               "enable-calendar",
-               "enable-bcmath",
-               "enable-pdo",
-               "enable-sockets",
-               "enable-soap",
-               "with-curl",
-               "with-gd",
-               "with-jpeg-dir",
-               "with-png-dir",
-               "with-zlib",
-               "with-tidy",
-               "with-mysqli",
-               "with-pdo-mysql",
-               "with-pdo-sqlite",
-               "with-gettext",
-               "with-openssl"
+               'with-layout=GNU',
+               'enable-mbstring',
+               'enable-calendar',
+               'enable-bcmath',
+               'enable-pdo',
+               'enable-sockets',
+               'enable-soap',
+               'with-curl',
+               'with-gd',
+               'with-jpeg-dir',
+               'with-png-dir',
+               'with-zlib',
+               'with-tidy',
+               'with-mysqli',
+               'with-pdo-mysql',
+               'with-pdo-sqlite',
+               'with-gettext',
+               'with-openssl',
            ]);
         }
 
@@ -133,7 +133,7 @@ class Compiler extends Base
      *
      * @return Compiler
      */
-    public function setOptions($options): Compiler
+    public function setOptions($options): self
     {
         $this->options = $options;
 
@@ -157,7 +157,7 @@ class Compiler extends Base
      *
      * @return Compiler
      */
-    public function setDeployPath($deployPath): Compiler
+    public function setDeployPath($deployPath): self
     {
         $this->deployPath = "/tmp/php-$deployPath";
 
@@ -175,16 +175,17 @@ class Compiler extends Base
     {
         $files = scandir($dir);
         foreach ($files as $file) {
-            if (in_array($file, array('.', '..'))) {
+            if (in_array($file, ['.', '..'])) {
                 continue;
             }
 
             $file = "$dir/$file";
 
-            if (is_dir($file))
+            if (is_dir($file)) {
                 $this->remove($file);
-            else
+            } else {
                 unlink($file);
+            }
         }
 
         if (is_dir($dir)) {
