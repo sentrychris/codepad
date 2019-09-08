@@ -1,3 +1,5 @@
+[![StyleCI](https://github.styleci.io/repos/179174116/shield?branch=master)](https://github.styleci.io/repos/179174116)
+
 ## System Requirements
 - build-essential 
 - pkg-config
