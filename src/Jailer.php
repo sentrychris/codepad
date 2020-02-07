@@ -48,7 +48,7 @@ class Jailer extends Base
 
             if (!file_exists($this->root . $device)) {
                 if ($this->isDebug()) {
-                    echo 'Creating ' . $this->root . $this->device . PHP_EOL;
+                    echo 'Creating ' . $this->root . $device . PHP_EOL;
                 }
                 mkdir($this->root . $device);
             }
