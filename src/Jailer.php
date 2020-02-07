@@ -46,11 +46,11 @@ class Jailer extends Base
             
             $device = substr($device, 0, 1) === '/' ? $device : '/' . $device;
 
-            if (!file_exists($this->root.$device)) {
+            if (!file_exists($this->root . $device)) {
                 if ($this->isDebug()) {
-                    echo 'Creating filesystem...' . PHP_EOL;
+                    echo 'Creating ' . $this->root . $this->device . PHP_EOL;
                 }
-                mkdir($this->root.$device);
+                mkdir($this->root . $device);
             }
         }
     }
@@ -63,7 +63,7 @@ class Jailer extends Base
         foreach ($this->fs as $device) {
             $device = substr($device, 0, 1) === '/' ? $device : '/' . $device;
             echo 'Mounting ' . $device . '...' . PHP_EOL;
-            $this->mount($device, $this->root.$device, 'bind', 'ro');
+            $this->mount($device, $this->root . $device, 'bind', 'ro');
         }
     }
 
@@ -131,7 +131,7 @@ class Jailer extends Base
      */
     public function mkJailDir(string $device) : void
     {
-        mkdir($this->root.$device);
+        mkdir($this->root . $device);
     }
 
     /**
