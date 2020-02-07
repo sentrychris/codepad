@@ -54,7 +54,6 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 
 ### Creating the chrooted Jail
 
-Create the jail:
 ```php
 <?php
 
