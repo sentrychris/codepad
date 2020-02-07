@@ -33,7 +33,7 @@ class Jailer extends Base
      *
      * @param string $version
      */
-    public function build(string $version)
+    public function buildJail(string $version)
     {
         if (!file_exists($this->root)) {
             if ($this->isDebug()) {
@@ -52,8 +52,17 @@ class Jailer extends Base
                 }
                 mkdir($this->root.$device);
             }
+        }
+    }
 
-            echo 'Mounting filesystem...' . PHP_EOL;
+    /**
+     * Mount all devices.
+     */
+    public function mountAll()
+    {
+        foreach ($this->fs as $device) {
+            $device = substr($device, 0, 1) === '/' ? $device : '/' . $device;
+            echo 'Mounting ' . $device . '...' . PHP_EOL;
             $this->mount($device, $this->root.$device, 'bind', 'ro');
         }
     }
@@ -83,12 +92,12 @@ class Jailer extends Base
     }
 
     /**
-     * Add devices.
+     * Set devices to be added.
      * 
      * @param mixed $device
      * @return void
      */
-    public function addDevices(...$device): void
+    public function setDevices(...$device): void
     {
         $this->fs = $device;
     }

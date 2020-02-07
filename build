@@ -23,19 +23,19 @@ run(new Jailer($debug), $version);
  */
 function run(Jailer $jailer, string $version)
 {
-    $jailer->setRoot('/opt/phpjail2');
-    
-    $jailer->addDevices(
-        'bin',
-        'dev',
-        'etc',
-        'lib',
-        'lib64',
-        'usr'
-    );
+    // Initialise the jail
+    $jailer->setRoot('/opt/phpjail');
+    $jailer->setDevices('bin','dev','etc','lib','lib64','usr');
 
-    $jailer->build($version);
+    // Build chrooted filesystem
+    $jailer->buildJail($version);
+    $jailer->setPermissions(0711);
+    $jailer->setOwnership('root', 'root');
 
+    // Mount all devices
+    $jailer->mountAll();
+
+    // Add compiled PHP instance
     $php = '/php-' . $version;
     $jailer->mkJailDir($php);
     $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');

@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label class="form-check-label"> PHP Version:
                         <select class="form-control" name="ver" id="ver">
-                            <option value="7.3.6">7.3.60</option>
+                            <option value="7.3.14">7.3.14</option>
                             <option value="7.2.19">7.2.19</option>
                             <option value="7.1.30">7.1.30</option>
                             <option value="7.0.33">7.0.33</option>
