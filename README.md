@@ -22,7 +22,7 @@ $ php install <(int)version> <(bool)debug>
 
 Create jail:
 ```bash
-$ php build <(int)version> <(bool)debug>
+$ sudo php build <(int)version> <(bool)debug>
 ```
 
 ## Downloading & Compiling
