@@ -11,7 +11,7 @@ use Exception;
  * via Versyx\Codepad\Downloader::download() and compiling them for
  * deployment to chroot jails.
  *
- * @author Chris Rowles <cmrowles@pm.me>
+ * @author Chris Rowles <me@rowles.ch>
  */
 class Compiler extends Base
 {

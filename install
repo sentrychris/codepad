@@ -2,8 +2,8 @@
 
 <?php
 
-use Versyx\Codepad\Downloader;
 use Versyx\Codepad\Compiler;
+use Versyx\Codepad\Downloader;
 
 require __DIR__ . '/config/bootstrap.php';
 
@@ -13,17 +13,17 @@ if(!isset($argv[1])) {
 
 $version = $argv[1];
 $debug = $argv[2];
-init(new Downloader($debug), new Compiler($debug), $version);
+
+run(new Downloader($debug), new Compiler($debug), $version);
 
 /**
- *
- * init test method.
+ * download/compile test method.
  *
  * @param Downloader $downloader
  * @param Compiler $compiler
  * @param string $version
  */
-function init(Downloader $downloader, Compiler $compiler, string $version)
+function run(Downloader $downloader, Compiler $compiler, string $version)
 {
     try {
         $php = $downloader->setVersion($version)->download();

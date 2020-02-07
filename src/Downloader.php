@@ -10,7 +10,7 @@ use Exception;
  * This class is responsible for downloading bzip2 archives for
  * specified PHP versions.
  *
- * @author Chris Rowles <cmrowles@pm.me>
+ * @author Chris Rowles <me@rowles.ch>
  */
 class Downloader extends Base
 {
