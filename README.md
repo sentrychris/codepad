@@ -14,8 +14,15 @@
 
 ## Quick install
 
+Install PHP:
+
 ```bash
 $ php install <(int)version> <(bool)debug>
+```
+
+Create jail:
+```bash
+$ php build <(int)version> <(bool)debug>
 ```
 
 ## Downloading & Compiling
@@ -30,9 +37,9 @@ require __DIR__ . '/../config/bootstrap.php';
 
 $debug = true;
 $version = "7.1.30";
-init(new Downloader($debug), new Compiler($debug), $version);
+run(new Downloader($debug), new Compiler($debug), $version);
 
-function init(Downloader $downloader, Compiler $compiler, string $version)
+function run(Downloader $downloader, Compiler $compiler, string $version)
 {
     try {
         $php = $downloader->setVersion($version)->download();
@@ -47,42 +54,37 @@ function init(Downloader $downloader, Compiler $compiler, string $version)
 
 ### Creating the chrooted Jail
 
-The jailer module is incomplete, in the meantime please follow these instructions:
-
 Create the jail:
-```bash
-$ mkdir /opt/phpjail
-$ cd /opt/phpjail
-```
+```php
+<?php
 
-Create the filesystem
-```bash
-$ mkdir bin etc dev lib lib64 usr
-$ mkdir etc/alternatives
-```
+use Versyx\Codepad\Jailer;
 
-Create mount points for PHP versions
-```bash
-$ mkdir php-7.0.33 php-7.1.30 php-7.2.19...
-```
+require __DIR__ . '/config/bootstrap.php';
 
-Set permissions
-```bash
-$ chmod -R 0711 /opt/phpjail
-$ chown -R root:root /opt/phpjail
-```
+$debug = true;
+$version = "7.1.30";
+run(new Jailer($debug), $version);
 
-Mount filesystem in read-only mode
-```bash
-mount -o bind,ro /bin /opt/phpjail/bin
-mount -o bind,ro /dev /opt/phpjail/dev
-mount -o bind,ro /lib /opt/phpjail/lib
-mount -o bind,ro /lib64 /opt/phpjail/lib64
-mount -o bind,ro /usr /opt/phpjail/usr
-mount -o bind,ro /etc/alternatives /opt/phpjail/etc/alternatives
-mount -o bind,ro /tmp/php-7.0.33 /opt/phpjail/php-7.0.33
-mount -o bind,ro /tmp/php-7.1.30 /opt/phpjail/php-7.1.30
-mount -o bind,ro /tmp/php-7.2.19 /opt/phpjail/php-7.2.19
+function run(Jailer $jailer, string $version)
+{
+    // Initialise the jail
+    $jailer->setRoot('/opt/phpjail');
+    $jailer->setDevices('bin','dev','etc','lib','lib64','usr');
+
+    // Build chrooted filesystem
+    $jailer->buildJail($version);
+    $jailer->setPermissions(0711);
+    $jailer->setOwnership('root', 'root');
+
+    // Mount all devices
+    $jailer->mountAll();
+
+    // Add compiled PHP instance
+    $php = '/php-' . $version;
+    $jailer->mkJailDir($php);
+    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+}
 ```
 
 ### Enabling the worker
