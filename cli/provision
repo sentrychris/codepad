@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-VERSION=$1
-DEBUG=$2
-
-php install "$VERSION" "$DEBUG"
-php build "$VERSION" "$DEBUG"
