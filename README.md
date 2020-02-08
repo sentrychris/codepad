@@ -17,12 +17,12 @@
 Install PHP:
 
 ```bash
-$ php install <(int)version> <(bool)debug>
+$ php cli/install <(int)version> <(bool)debug>
 ```
 
 Create jail:
 ```bash
-$ sudo php build <(int)version> <(bool)debug>
+$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --debug=<(bool)debug>
 ```
 
 ## Downloading & Compiling
@@ -59,7 +59,7 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 
 use Versyx\Codepad\Jailer;
 
-require __DIR__ . '/config/bootstrap.php';
+require __DIR__ . '/../config/bootstrap.php';
 
 $debug = true;
 $version = "7.1.30";
