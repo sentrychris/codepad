@@ -11,10 +11,15 @@ if(!isset($argv[1])) {
     die("You must specify a PHP version.");
 }
 
-$version = $argv[1];
-$debug = $argv[2];
+$short = 'v:d:';
+$long  = ['version:', 'debug:'];
+$opts  = getopt($short, $long);
 
-run(new Downloader($debug), new Compiler($debug), $version);
+run(
+    new Downloader($opts['debug'] ?? $opts['d']),
+    new Compiler($opts['debug'] ?? $opts['d']),
+    $opts['version'] ?? $opts['v']
+);
 
 /**
  * download/compile test method.

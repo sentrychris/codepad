@@ -17,7 +17,7 @@
 Install PHP:
 
 ```bash
-$ php cli/install <(int)version> <(bool)debug>
+$ php cli/install --version="<(string)version>" --debug="<(bool)debug>"
 ```
 
 Create jail:
@@ -91,12 +91,20 @@ function run(Jailer $jailer, string $version)
 You'll need to allow www-data to run the worker script as a privileged user, add entries for each compiled version to
  `/etc/sudoers` like so:
 
+
+ubuntu:
 ```
 www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/http/worker.php 7.3.6
 www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/http/worker.php 7.0.33
 ```
 
-This will restrict `www-data`'s sudo privileges to only running the worker.
+centos:
+```
+apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/http/worker.php 7.3.6
+apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/http/worker.php 7.0.33
+```
+
+This will restrict `www-data`'s|`apache`'s sudo privileges to only running the worker.
 
 ### How it Works
 
@@ -136,4 +144,4 @@ proc_close($ph);
 
 ## Example Deployment
 
-![example deployment](https://rowles.ch/images/codepad.jpg)
+![example deployment](codepad.png)
