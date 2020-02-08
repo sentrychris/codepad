@@ -22,7 +22,7 @@ $ php cli/install <(int)version> <(bool)debug>
 
 Create jail:
 ```bash
-$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --debug=<(bool)debug>
+$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --debug="<(bool)debug>"
 ```
 
 ## Downloading & Compiling
