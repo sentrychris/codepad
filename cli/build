@@ -1,0 +1,47 @@
+#!/usr/bin/env php
+
+<?php
+
+use Versyx\Codepad\Jailer;
+
+require __DIR__ . '/../config/bootstrap.php';
+
+if(!isset($argv[1])) {
+    die('You must specify a PHP version.' . PHP_EOL);
+}
+
+$short = 'j:v:d:';
+$long  = ['jail:', 'version:', 'debug:'];
+$opts  = getopt($short, $long);
+
+run(new Jailer($opts['debug'] ?? $opts['d']), $opts);
+
+/**
+ * Jail builder test method.
+ * 
+ * @param Jailer $jailer
+ * @param string $version
+ */
+function run(Jailer $jailer, array $opts)
+{
+    $jail = $opts['jail'] ?? $opts['j'];
+    $version = $opts['version'] ?? $opts['v'];
+
+    // Initialise the jail
+    $jailer->setRoot($jail);
+    $jailer->setDevices('bin','dev','etc','lib','lib64','usr');
+
+    // Build chrooted filesystem
+    $jailer->buildJail($version);
+    $jailer->setPermissions(0711);
+    $jailer->setOwnership('root', 'root');
+
+    // Mount all devices
+    $jailer->mountAll();
+
+    // Add compiled PHP instance
+    $php = '/php-' . $version;
+    $jailer->mkJailDir($php);
+    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+}
+
