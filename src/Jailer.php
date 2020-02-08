@@ -37,20 +37,19 @@ class Jailer extends Base
     {
         if (!file_exists($this->root)) {
             if ($this->isDebug()) {
-                echo 'Creating jail...' . PHP_EOL;
+                echo 'Creating jail...'.PHP_EOL;
             }
             mkdir($this->root);
         }
 
         foreach ($this->fs as $device) {
-            
-            $device = substr($device, 0, 1) === '/' ? $device : '/' . $device;
+            $device = substr($device, 0, 1) === '/' ? $device : '/'.$device;
 
-            if (!file_exists($this->root . $device)) {
+            if (!file_exists($this->root.$device)) {
                 if ($this->isDebug()) {
-                    echo 'Creating ' . $this->root . $device . PHP_EOL;
+                    echo 'Creating '.$this->root.$device.PHP_EOL;
                 }
-                mkdir($this->root . $device);
+                mkdir($this->root.$device);
             }
         }
     }
@@ -61,16 +60,16 @@ class Jailer extends Base
     public function mountAll()
     {
         foreach ($this->fs as $device) {
-            $device = substr($device, 0, 1) === '/' ? $device : '/' . $device;
-            echo 'Mounting ' . $device . '...' . PHP_EOL;
-            $this->mount($device, $this->root . $device, 'bind', 'ro');
+            $device = substr($device, 0, 1) === '/' ? $device : '/'.$device;
+            echo 'Mounting '.$device.'...'.PHP_EOL;
+            $this->mount($device, $this->root.$device, 'bind', 'ro');
         }
     }
 
     /**
      * Mounts filesystem.
      *
-     * @param array $opt
+     * @param array  $opt
      * @param string $device
      * @param string $point
      */
@@ -82,8 +81,9 @@ class Jailer extends Base
 
     /**
      * Fetch a device.
-     * 
+     *
      * @param string $device
+     *
      * @return array
      */
     public function getDevice(string $device): array
@@ -93,8 +93,9 @@ class Jailer extends Base
 
     /**
      * Set devices to be added.
-     * 
+     *
      * @param mixed $device
+     *
      * @return void
      */
     public function setDevices(...$device): void
@@ -104,7 +105,7 @@ class Jailer extends Base
 
     /**
      * Fetch root.
-     * 
+     *
      * @return array
      */
     public function getRoot()
@@ -114,8 +115,9 @@ class Jailer extends Base
 
     /**
      * Set root.
-     * 
+     *
      * @param mixed $device
+     *
      * @return void
      */
     public function setRoot(string $root): void
@@ -125,18 +127,19 @@ class Jailer extends Base
 
     /**
      * mkdir.
-     * 
+     *
      * @param string $device
+     *
      * @return void
      */
-    public function mkJailDir(string $device) : void
+    public function mkJailDir(string $device): void
     {
-        mkdir($this->root . $device);
+        mkdir($this->root.$device);
     }
 
     /**
      * chmod recursive.
-     * 
+     *
      * @param mixed $mode
      */
     public function setPermissions($mode)
@@ -145,14 +148,14 @@ class Jailer extends Base
             new \RecursiveDirectoryIterator($this->root)
         );
 
-        foreach($iterator as $item) {
+        foreach ($iterator as $item) {
             chmod($item, $mode);
         }
     }
 
     /**
      * chown recursive.
-     * 
+     *
      * @param string $owner
      * @param string $group
      */
@@ -162,7 +165,7 @@ class Jailer extends Base
             new \RecursiveDirectoryIterator($this->root)
         );
 
-        foreach($iterator as $item) {
+        foreach ($iterator as $item) {
             chown($item, $owner);
             chgrp($item, $group);
         }

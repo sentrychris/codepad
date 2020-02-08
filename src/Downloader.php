@@ -40,7 +40,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function download() : self
+    public function download(): self
     {
         $file = "php-$this->version.tar.bz2";
         $this->setTarget(@tempnam(sys_get_temp_dir().'/'.$file, 'php'));
@@ -97,7 +97,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setVersion($version) : self
+    public function setVersion($version): self
     {
         $this->version = $version;
 
@@ -121,7 +121,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setUrl($url) : self
+    public function setUrl($url): self
     {
         $this->url = $url;
 
@@ -145,7 +145,7 @@ class Downloader extends Base
      *
      * @return Downloader
      */
-    public function setTarget($target) : self
+    public function setTarget($target): self
     {
         $this->target = $target;
 

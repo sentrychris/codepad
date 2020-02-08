@@ -41,7 +41,7 @@ class Compiler extends Base
      *
      * @return string
      */
-    public function compile($version, $target) : string
+    public function compile($version, $target): string
     {
         $this->setDeployPath($version);
 
@@ -100,27 +100,27 @@ class Compiler extends Base
         if (is_null($this->options)) {
             // Set default
             $this->setOptions([
-               "with-config-file-path=$deployPath/etc",
-               "prefix=$deployPath",
-               'with-layout=GNU',
-               'enable-mbstring',
-               'enable-calendar',
-               'enable-bcmath',
-               'enable-pdo',
-               'enable-sockets',
-               'enable-soap',
-               'with-curl',
-               'with-gd',
-               'with-jpeg-dir',
-               'with-png-dir',
-               'with-zlib',
-               'with-tidy',
-               'with-mysqli',
-               'with-pdo-mysql',
-               'with-pdo-sqlite',
-               'with-gettext',
-               'with-openssl',
-           ]);
+                "with-config-file-path=$deployPath/etc",
+                "prefix=$deployPath",
+                'with-layout=GNU',
+                'enable-mbstring',
+                'enable-calendar',
+                'enable-bcmath',
+                'enable-pdo',
+                'enable-sockets',
+                'enable-soap',
+                'with-curl',
+                'with-gd',
+                'with-jpeg-dir',
+                'with-png-dir',
+                'with-zlib',
+                'with-tidy',
+                'with-mysqli',
+                'with-pdo-mysql',
+                'with-pdo-sqlite',
+                'with-gettext',
+                'with-openssl',
+            ]);
         }
 
         return $this->options;
@@ -171,7 +171,7 @@ class Compiler extends Base
      *
      * @return void
      */
-    protected function remove($dir) : void
+    protected function remove($dir): void
     {
         $files = scandir($dir);
         foreach ($files as $file) {
