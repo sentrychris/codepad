@@ -6,10 +6,6 @@ use Versyx\Codepad\Console\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
 
-if(!isset($argv[1])) {
-    die('You must specify a PHP version.' . PHP_EOL);
-}
-
 $short = 'j::v:';
 $long  = ['jail::', 'version:', 'first-run::'];
 $opts  = getopt($short, $long);

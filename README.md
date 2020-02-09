@@ -38,7 +38,7 @@ $ php cli/install --version="<(string)version>"
 
 Create jail:
 ```bash
-$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>"
+$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --first-run="<(bool)first-run>"
 ```
 
 ## Application Structure
@@ -112,10 +112,6 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 use Versyx\Codepad\Console\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
-
-if(!isset($argv[1])) {
-    die('You must specify a PHP version.' . PHP_EOL);
-}
 
 $short = 'j::v:';
 $long  = ['jail::', 'version:', 'first-run::'];
