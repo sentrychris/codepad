@@ -61,7 +61,9 @@ class Jailer extends Console
     {
         foreach ($this->fs as $device) {
             $device = substr($device, 0, 1) === '/' ? $device : '/'.$device;
-            echo 'Mounting '.$device.'...'.PHP_EOL;
+            if ($this->isDebug()) {
+                echo 'Mounting '.$device.'...'.PHP_EOL;
+            }
             $this->mount($device, $this->root.$device, 'bind', 'ro');
         }
     }
@@ -76,6 +78,9 @@ class Jailer extends Console
     public function mount(string $device, string $point, ...$opt)
     {
         $opt = implode(',', $opt);
+        if ($this->isDebug()) {
+            echo 'Mounting '.$device.'...'.PHP_EOL;
+        }
         shell_exec("mount -o $opt $device $point 2>&1");
     }
 
