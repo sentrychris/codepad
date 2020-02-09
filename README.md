@@ -8,11 +8,11 @@
 * [Quick Install](#quick-install)
 * [Application Structure](#application-structure)
 * [Downloading & Compiling](#downloading--compiling)
-  * [Services](#services)
-  * [Controllers](#controllers)
-  * [Views](#views)
-  * [Routing](#routing)
-* [Frontend](#frontend)
+* [Creating the Jail](#creating-the-jail)
+* [Enabling the Worker](#enabling-the-worker)
+  * [How it Works](#how-it-works)
+* [Example Deployment](#example-deployment)
+
 
 ## System Requirements
 
@@ -102,9 +102,7 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 }
 ```
 
-## Deploying
-
-### Creating the chrooted Jail
+## Creating the Jail
 
 ```php
 <?php
@@ -166,7 +164,7 @@ function run(Jailer $jailer, array $opts)
 }
 ```
 
-### Enabling the worker
+## Enabling the Worker
 
 You'll need to allow www-data to run the worker script as a privileged user, add entries for each compiled version to
  `/etc/sudoers` like so:
