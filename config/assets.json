@@ -2,14 +2,13 @@
     "vendor": {
         "styles": [
             "node_modules/bootstrap/scss/bootstrap.scss",
-            "node_modules/codemirror/lib/codemirror.css"
+            "resources/assets/lib/codemirror.css",
+            "resources/assets/lib/monokai.css"
         ],
         "css": "bundle.min.css",
         "scripts": [
             "node_modules/axios/dist/axios.min.js",
-            "node_modules/bootstrap/dist/js/bootstrap.min.js",
-            "node_modules/codemirror/mode/clike/clike.js",
-            "node_modules/codemirror/mode/php/php.js"
+            "node_modules/bootstrap/dist/js/bootstrap.min.js"
         ],
         "js": "bundle.min.js"
     },
@@ -22,6 +21,18 @@
             "resources/assets/js/app.js"
         ],
         "js": "app.min.js"
+    },
+    "editor": {
+        "scripts": [
+            "resources/assets/lib/matchbrackets.js",
+            "resources/assets/lib/htmlmixed.js",
+            "resources/assets/lib/xml.js",
+            "resources/assets/lib/javascript.js",
+            "resources/assets/lib/css.js",
+            "resources/assets/lib/clike.js",
+            "resources/assets/lib/php.js"
+        ],
+        "js": "./public/lib"
     },
     "out": "./public"
 }

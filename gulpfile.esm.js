@@ -24,18 +24,33 @@ function scripts(cb) {
         .pipe(plugin.sourcemaps.init())
         .pipe(plugin.concat(config.vendor.js))
         .pipe(plugin.sourcemaps.write('./'))
-        .pipe(dest(config.out + '/js'));
+        .pipe(dest(config.out + '/lib'));
 
     src(config.app.scripts)
         .pipe(plugin.rename(config.app.js))
         .pipe(plugin.sourcemaps.init())
         .pipe(plugin.uglifyEs.default())
         .pipe(plugin.sourcemaps.write('./'))
-        .pipe(dest(config.out + '/js'));
+        .pipe(dest(config.out + '/lib'));
+
+    src(config.editor.scripts)
+        .pipe(plugin.sourcemaps.init())
+        .pipe(plugin.concat('editor.min.js'))
+        .pipe(plugin.sourcemaps.write('./'))
+        .pipe(dest(config.out + '/lib'));
 
     cb();
 }
 
+function copy(cb)
+{
+    src('./resources/assets/lib/codemirror.js')
+        .pipe(dest('./public/lib/'));
+
+    cb();
+}
+
+exports.copy    = copy;
 exports.styles  = styles;
 exports.scripts = scripts;
-exports.build   = series(styles, scripts);
+exports.build   = series(copy, styles, scripts);

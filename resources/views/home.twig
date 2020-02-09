@@ -1,7 +1,6 @@
 {% extends 'layout.twig' %}
 
 {% block styles %}
-    <link rel="stylesheet" href="lib/monokai.css">
 {% endblock %}
 
 {% block content %}
@@ -36,4 +35,16 @@
     </div>
 {% endblock %}
 {% block scripts %}
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "application/x-httpd-php",
+            theme: "monokai",
+            indentUnit: 2,
+            indentWithTabs: true
+        });
+
+        editor.setSize('auto', 600);
+    </script>
 {% endblock %}
