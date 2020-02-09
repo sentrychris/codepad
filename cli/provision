@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# Using https://app.vagrantup.com/raekw0n/boxes/ubuntu16
+
+echo "Installing backend dependencies"
+composer install
+
+echo "Jailing PHP instances"
+sudo php cli/build --jail="/opt/phpjail" --version="7.0.33" --first-run=true
+sudo php cli/build --jail="/opt/phpjail" --version="7.1.30"
+sudo php cli/build --jail="/opt/phpjail" --version="7.2.19"
+sudo php cli/build --jail="/opt/phpjail" --version="7.3.14"
+
+echo "Modifying sudoers file"
+echo 'www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33' | sudo EDITOR='tee -a' visudo
+echo 'www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.1.30/bin/php /var/www/codepad/public/http/worker.php 7.1.30' | sudo EDITOR='tee -a' visudo
+echo 'www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.2.19/bin/php /var/www/codepad/public/http/worker.php 7.2.19' | sudo EDITOR='tee -a' visudo
+echo 'www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.14/bin/php /var/www/codepad/public/http/worker.php 7.3.14' | sudo EDITOR='tee -a' visudo
+
+echo "Installing frontend dependencies"
+npm install
+
+echo "Compiling frontend assets"
+./node_modules/.bin/gulp build --default
+
+echo "Configuring virtualhost"
+sudo vhost create ubuntu.codepad.local codepad/public
