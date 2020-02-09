@@ -43,6 +43,10 @@ function run(Jailer $jailer, array $opts)
     }
     
     $jailer->mkJailDir($php);
-    $jailer->mount('/var/www/codepad' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    if(file_exists('/var/www/codepad' . $php)) {
+        $jailer->mount('/var/www/codepad' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    } else {
+        $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    }
 }
 

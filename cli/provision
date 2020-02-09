@@ -2,8 +2,27 @@
 
 # Using https://app.vagrantup.com/raekw0n/boxes/ubuntu16
 
+INSTALLPATH="/var/www/codepad/php-"
+
 echo "Installing backend dependencies"
 composer install
+
+echo "Checking for pre-compiled PHP versions"
+if [ ! -d "${INSTALLPATH}7.0.33" ]; then
+    sudo php cli/install --version="7.0.33"
+fi
+
+if [ ! -d "${INSTALLPATH}7.1.30" ]; then
+    sudo php cli/install --version="7.1.30"
+fi
+
+if [ ! -d "${INSTALLPATH}7.2.19" ]; then
+    sudo php cli/install --version="7.2.19"
+fi
+
+if [ ! -d "${INSTALLPATH}7.3.14" ]; then
+    sudo php cli/install --version="7.3.14"
+fi
 
 echo "Jailing PHP instances"
 sudo php cli/build --jail="/opt/phpjail" --version="7.0.33" --first-run=true

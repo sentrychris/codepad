@@ -54,7 +54,7 @@ $app['log'] = function () {
 $app['view'] = function () {
     $loader = new FilesystemLoader(__DIR__.'/../resources/views');
     $view = new Environment($loader, [
-        'cache' => env('APP_CACHE') ? __DIR__.'/../public/cache' : env('APP_CACHE'),
+        'cache' => false,
         'debug' => env('APP_DEBUG'),
     ]);
     $view->addExtension(new DebugExtension());
