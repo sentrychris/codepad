@@ -41,6 +41,17 @@ Create jail:
 $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --first-run="<(bool)first-run>"
 ```
 
+Instead of passing options explicitly via the command line, you can also set them via environment variables in `.env`:
+```bash
+JAIL_ROOT="/opt/phpjail"
+JAIL_DEVICES="bin,dev,etc,lib,lib64,usr"
+JAIL_PHP_VERSION="7.1.30"
+```
+
+```bash
+$ sudo php cli/build
+```
+
 ## Application Structure
 ```
 .
