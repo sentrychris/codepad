@@ -1,6 +1,8 @@
 <?php
 
-namespace Versyx\Codepad\Cli;
+namespace Versyx\Codepad\Console;
+
+use Pimple\Container;
 
 /**
  * Base.
@@ -8,7 +10,7 @@ namespace Versyx\Codepad\Cli;
  * This is the base class for the app, all classes must
  * extend this class.
  */
-class Base
+abstract class Console
 {
     /**
      * @var bool

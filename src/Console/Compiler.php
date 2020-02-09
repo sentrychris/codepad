@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Codepad\Cli;
+namespace Versyx\Codepad\Console;
 
 use Exception;
 
@@ -13,7 +13,7 @@ use Exception;
  *
  * @author Chris Rowles <me@rowles.ch>
  */
-class Compiler extends Base
+class Compiler extends Console
 {
     /** @var $options array */
     protected $options;

@@ -2,8 +2,8 @@
 
 <?php
 
-use Versyx\Codepad\Cli\Compiler;
-use Versyx\Codepad\Cli\Downloader;
+use Versyx\Codepad\Console\Compiler;
+use Versyx\Codepad\Console\Downloader;
 
 require __DIR__ . '/../config/bootstrap.php';
 
@@ -11,13 +11,13 @@ if(!isset($argv[1])) {
     die("You must specify a PHP version.");
 }
 
-$short = 'v:d:';
-$long  = ['version:', 'debug:'];
+$short = 'v:';
+$long  = ['version:'];
 $opts  = getopt($short, $long);
 
 run(
-    new Downloader($opts['debug'] ?? $opts['d']),
-    new Compiler($opts['debug'] ?? $opts['d']),
+    $app['downloader'],
+    $app['compiler'],
     $opts['version'] ?? $opts['v']
 );
 

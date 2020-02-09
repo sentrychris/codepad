@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Codepad\Cli;
+namespace Versyx\Codepad\Console;
 
 /**
  * PHP Jailer.
@@ -10,7 +10,7 @@ namespace Versyx\Codepad\Cli;
  *
  * @author Chris Rowles <me@rowles.ch>
  */
-class Jailer extends Base
+class Jailer extends Console
 {
     /** @var $root */
     protected $root;
@@ -84,21 +84,33 @@ class Jailer extends Base
      *
      * @param string $device
      *
-     * @return array
+     * @return mixed
      */
-    public function getDevice(string $device): array
+    public function getDevice(string $device)
     {
         return $this->fs[$device];
     }
 
     /**
+     * Fetch all devices.
+     *
+     * @param string $device
+     *
+     * @return mixed
+     */
+    public function getDevices()
+    {
+        return $this->fs;
+    }
+
+    /**
      * Set devices to be added.
      *
-     * @param mixed $device
+     * @param array $device
      *
      * @return void
      */
-    public function setDevices(...$device): void
+    public function setDevices(array $device): void
     {
         $this->fs = $device;
     }
@@ -106,9 +118,9 @@ class Jailer extends Base
     /**
      * Fetch root.
      *
-     * @return array
+     * @return string
      */
-    public function getRoot()
+    public function getRoot(): string
     {
         return $this->root;
     }
@@ -116,7 +128,7 @@ class Jailer extends Base
     /**
      * Set root.
      *
-     * @param mixed $device
+     * @param string $root
      *
      * @return void
      */

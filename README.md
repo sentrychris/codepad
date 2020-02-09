@@ -1,5 +1,17 @@
 [![StyleCI](https://github.styleci.io/repos/179174116/shield?branch=master)](https://github.styleci.io/repos/179174116)
 
+
+## Table of contents
+
+* [Quick Install](#quick-install)
+* [Application Structure](#application-structure)
+* [Documentation](#documentation)
+  * [Services](#services)
+  * [Controllers](#controllers)
+  * [Views](#views)
+  * [Routing](#routing)
+* [Frontend](#frontend)
+
 ## System Requirements
 - build-essential 
 - pkg-config
@@ -17,12 +29,39 @@
 Install PHP:
 
 ```bash
-$ php cli/install --version="<(string)version>" --debug="<(bool)debug>"
+$ php cli/install --version="<(string)version>"
 ```
 
 Create jail:
 ```bash
-$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --debug="<(bool)debug>"
+$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>"
+```
+
+## Application Structure
+```
+.
+├── config
+│   ├── .env                # Environment variables
+│   ├── assets.json         # Front-end assets to compile
+│   ├── bootstrap.php       # Application bootstrapper
+│   ├── controllers.php     # Place to register application controllers
+│   ├── dependencies.php    # Place to register application dependencies
+│   └── routes.php          # Place to register application routes
+├── node_modules            # Reserved for Yarn
+├── public                  # Entry, web and cache files
+├── resources               # Application resources
+│   ├── assets              # Raw, un-compiled assets such as media, SASS and JavaScript
+│   ├── views               # View templates (twig)
+├── src                     # PHP source code (The App namespace)
+│   ├── Console             # Console commands
+│   ├── Frontend            # Configuration files
+│       ├── Controllers     # Frontend controllers
+├── vendor                  # Reserved for Composer
+├── composer.json           # Composer dependencies
+├── gulpfile.esm.js         # Gulp configuration
+├── LICENSE                 # The license
+├── package.json            # Yarn dependencies
+└── README.md               # This file
 ```
 
 ## Downloading & Compiling
@@ -30,14 +69,24 @@ $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" -
 ```php
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+use Versyx\Codepad\Console\Compiler;
+use Versyx\Codepad\Console\Downloader;
 
-use Versyx\Codepad\Cli\Downloader;
-use Versyx\Codepad\Cli\Compiler;
+require __DIR__ . '/../config/bootstrap.php';
 
-$debug = true;
-$version = "7.1.30";
-run(new Downloader($debug), new Compiler($debug), $version);
+if(!isset($argv[1])) {
+    die("You must specify a PHP version.");
+}
+
+$short = 'v:';
+$long  = ['version:'];
+$opts  = getopt($short, $long);
+
+run(
+    $app['downloader'],
+    $app['compiler'],
+    $opts['version'] ?? $opts['v']
+);
 
 function run(Downloader $downloader, Compiler $compiler, string $version)
 {
@@ -57,32 +106,60 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 ```php
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+use Versyx\Codepad\Console\Jailer;
 
-use Versyx\Codepad\Cli\Jailer;
+require __DIR__ . '/../config/bootstrap.php';
 
-$debug = true;
-$version = "7.1.30";
-run(new Jailer($debug), $version);
+if(!isset($argv[1])) {
+    die('You must specify a PHP version.' . PHP_EOL);
+}
 
-function run(Jailer $jailer, string $version)
+$short = 'j::v:';
+$long  = ['jail::', 'version:', 'first-run::'];
+$opts  = getopt($short, $long);
+
+run($app['jailer'], $opts);
+
+function run(Jailer $jailer, array $opts)
 {
-    // Initialise the jail
-    $jailer->setRoot('/opt/phpjail');
-    $jailer->setDevices('bin','dev','etc','lib','lib64','usr');
+    if(!$jail = env("JAIL_ROOT")) {
+        $jail = $opts['jail'] ?? $opts['j'];
+    }
 
-    // Build chrooted filesystem
-    $jailer->buildJail($version);
-    $jailer->setPermissions(0711);
-    $jailer->setOwnership('root', 'root');
+    if(!$version = env("JAIL_PHP_VERSION")) {
+        $version = $opts['version'] ?? $opts['v'];
+    }
 
-    // Mount all devices
-    $jailer->mountAll();
+    if(env("JAIL_DEVICES")) {
+        $jailer->setDevices(explode(',', env("JAIL_DEVICES")));
+    } else {
+        $jailer->setDevices(['bin','dev','etc','lib','lib64','usr']);
+    }
 
-    // Add compiled PHP instance
-    $php = '/php-' . $version;
-    $jailer->mkJailDir($php);
-    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    if($jail) {
+        $jailer->setRoot($jail);
+    } else {
+        echo 'You must set a root path.' . PHP_EOL;
+        exit;
+    }
+
+    if($version) {
+        $php = '/php-' . $version;
+
+        $jailer->buildJail($version);
+
+        if(isset($opts['first-run'])) {
+            $jailer->setPermissions(0711);
+            $jailer->setOwnership('root', 'root');
+            $jailer->mountAll();
+        }
+        
+        $jailer->mkJailDir($php);
+        $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    } else {
+        echo 'You must set a version.' . PHP_EOL;
+        exit;
+    }
 }
 ```
 
@@ -94,14 +171,14 @@ You'll need to allow www-data to run the worker script as a privileged user, add
 
 ubuntu:
 ```
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/http/worker.php 7.3.6
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/http/worker.php 7.0.33
+www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
+www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
 
 centos:
 ```
-apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/http/worker.php 7.3.6
-apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/http/worker.php 7.0.33
+apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
+apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
 
 This will restrict `www-data`'s|`apache`'s sudo privileges to only running the worker.

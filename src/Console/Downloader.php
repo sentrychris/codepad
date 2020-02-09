@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Codepad\Cli;
+namespace Versyx\Codepad\Console;
 
 use Exception;
 
@@ -12,7 +12,7 @@ use Exception;
  *
  * @author Chris Rowles <me@rowles.ch>
  */
-class Downloader extends Base
+class Downloader extends Console
 {
     /** @var $url string */
     protected $url = 'https://www.php.net/distributions/';

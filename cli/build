@@ -2,7 +2,7 @@
 
 <?php
 
-use Versyx\Codepad\Cli\Jailer;
+use Versyx\Codepad\Console\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
 
@@ -10,43 +10,57 @@ if(!isset($argv[1])) {
     die('You must specify a PHP version.' . PHP_EOL);
 }
 
-$short = 'j:v:d:';
-$long  = ['jail:', 'version:', 'debug:'];
+$short = 'j::v:';
+$long  = ['jail::', 'version:', 'first-run::'];
 $opts  = getopt($short, $long);
 
-run(new Jailer($opts['debug'] ?? $opts['d']), $opts);
+run($app['jailer'], $opts);
 
 /**
- * Jail builder test method.
+ * Jail builder method.
  * 
  * @param Jailer $jailer
  * @param string $version
  */
 function run(Jailer $jailer, array $opts)
 {
-    $jail = $opts['jail'] ?? $opts['j'];
-    $version = $opts['version'] ?? $opts['v'];
+    if(!$jail = env("JAIL_ROOT")) {
+        $jail = $opts['jail'] ?? $opts['j'];
+    }
 
-    // Initialise the jail
-    $jailer->setRoot($jail);
-    $jailer->setDevices('bin','dev','etc','lib','lib64','usr');
+    if(!$version = env("JAIL_PHP_VERSION")) {
+        $version = $opts['version'] ?? $opts['v'];
+    }
 
-    // Build chrooted filesystem
-    $jailer->buildJail($version);
-    $jailer->setPermissions(0711);
-    $jailer->setOwnership('root', 'root');
+    if(env("JAIL_DEVICES")) {
+        $jailer->setDevices(explode(',', env("JAIL_DEVICES")));
+    } else {
+        $jailer->setDevices(['bin','dev','etc','lib','lib64','usr']);
+    }
 
-    // Mount all devices
-    $jailer->mountAll();
+    if($jail) {
+        $jailer->setRoot($jail);
+    } else {
+        echo 'You must set a root path.' . PHP_EOL;
+        exit;
+    }
 
-    // Add compiled PHP instance
-    $php = '/php-' . $version;
-    $jailer->mkJailDir($php);
-    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    if($version) {
+        $php = '/php-' . $version;
 
-    // Add extra
-    $php = '/php-7.2.19';
-    $jailer->mkJailDir($php);
-    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+        $jailer->buildJail($version);
+
+        if(isset($opts['first-run'])) {
+            $jailer->setPermissions(0711);
+            $jailer->setOwnership('root', 'root');
+            $jailer->mountAll();
+        }
+        
+        $jailer->mkJailDir($php);
+        $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    } else {
+        echo 'You must set a version.' . PHP_EOL;
+        exit;
+    }
 }
 

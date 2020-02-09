@@ -52,3 +52,22 @@ function isBase64(string $string)
 {
     return (bool) preg_match('/^[a-zA-Z0-9\/\r\n+]*={0,2}$/', $string);
 }
+
+function convert(array $input)
+{
+    $r = [];
+    foreach ($input as $dotted) {
+        $keys = explode('.', $dotted);
+        $c = &$r[array_shift($keys)]; 
+        foreach ($keys as $key) {
+            if (isset($c[$key]) && $c[$key] === true) {
+                $c[$key] = [];
+            }
+            $c = &$c[$key];
+        }
+        if ($c === null) {
+            $c = true;
+        }
+    }
+    return $r;
+}
