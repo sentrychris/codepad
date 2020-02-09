@@ -16,7 +16,7 @@ require_once __DIR__.'/../vendor/autoload.php';
   | Load application controllers           |
   ----------------------------------------*/
  require __DIR__.'/../config/controllers.php';
- 
+
  /*----------------------------------------
   | Load application routes                |
   ----------------------------------------*/

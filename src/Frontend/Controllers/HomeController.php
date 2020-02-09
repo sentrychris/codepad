@@ -18,7 +18,7 @@ class HomeController extends Controller
     {
         $data['greeting'] = 'Hello World!';
         $viewData = $this->viewData($data);
-        
+
         return $this->render('home.twig', $viewData);
     }
 }

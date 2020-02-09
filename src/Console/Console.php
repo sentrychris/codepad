@@ -2,8 +2,6 @@
 
 namespace Versyx\Codepad\Console;
 
-use Pimple\Container;
-
 /**
  * Base.
  *
