@@ -7,15 +7,7 @@ use Versyx\Codepad\Console\Downloader;
 
 require __DIR__ . '/../config/bootstrap.php';
 
-if(!isset($argv[1])) {
-    die("You must specify a PHP version.");
-}
-
-$short = 'v:';
-$long  = ['version:'];
-$opts  = getopt($short, $long);
-
-run($app['downloader'], $app['compiler'], $opts);
+run($app['downloader'], $app['compiler'], getopt('', ['version:']));
 
 /**
  * download/compile test method.
@@ -27,7 +19,7 @@ run($app['downloader'], $app['compiler'], $opts);
 function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
     if(!$version = env("JAIL_PHP_VERSION")) {
-        $version = $opts['version'] ?? $opts['v'];
+        $version = $opts['version'] ?? error('You must specify a version.');
     }
     
     try {
@@ -35,5 +27,6 @@ function run(Downloader $downloader, Compiler $compiler, array $opts)
         $compiler->compile($php->getVersion(), $php->getTarget());
     } catch (\Exception $e) {
         echo $e->getMessage();
+        exit;
     }
 }

@@ -90,29 +90,30 @@ use Versyx\Codepad\Console\Downloader;
 
 require __DIR__ . '/../config/bootstrap.php';
 
-if(!isset($argv[1])) {
-    die("You must specify a PHP version.");
-}
+run($app['downloader'], $app['compiler'], getopt('', ['version:']));
 
-$short = 'v:';
-$long  = ['version:'];
-$opts  = getopt($short, $long);
-
-run(
-    $app['downloader'],
-    $app['compiler'],
-    $opts['version'] ?? $opts['v']
-);
-
-function run(Downloader $downloader, Compiler $compiler, string $version)
+/**
+ * download/compile test method.
+ *
+ * @param Downloader $downloader
+ * @param Compiler $compiler
+ * @param array $opts
+ */
+function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
+    if(!$version = env("JAIL_PHP_VERSION")) {
+        $version = $opts['version'] ?? error('You must specify a version.');
+    }
+    
     try {
         $php = $downloader->setVersion($version)->download();
         $compiler->compile($php->getVersion(), $php->getTarget());
     } catch (\Exception $e) {
         echo $e->getMessage();
+        exit;
     }
 }
+
 ```
 
 ## Creating the Jail
@@ -124,21 +125,15 @@ use Versyx\Codepad\Console\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
 
-$short = 'j::v:';
-$long  = ['jail::', 'version:', 'first-run::'];
-$opts  = getopt($short, $long);
-
-run($app['jailer'], $opts);
+run($app['jailer'], getopt('', ['jail::', 'version:', 'first-run::']));
 
 function run(Jailer $jailer, array $opts)
 {
     if(!$jail = env("JAIL_ROOT")) {
-        $jail = $opts['jail'] ?? $opts['j'];
+        $jail = $opts['jail'] ?? error('You must specify a root path.');
     }
 
-    if(!$version = env("JAIL_PHP_VERSION")) {
-        $version = $opts['version'] ?? $opts['v'];
-    }
+    $jailer->setRoot($jail);
 
     if(env("JAIL_DEVICES")) {
         $jailer->setDevices(explode(',', env("JAIL_DEVICES")));
@@ -146,30 +141,22 @@ function run(Jailer $jailer, array $opts)
         $jailer->setDevices(['bin','dev','etc','lib','lib64','usr']);
     }
 
-    if($jail) {
-        $jailer->setRoot($jail);
-    } else {
-        echo 'You must set a root path.' . PHP_EOL;
-        exit;
+    if(!$version = env("JAIL_PHP_VERSION")) {
+        $version = $opts['version'] ?? error('You must specify a version.');
     }
 
-    if($version) {
-        $php = '/php-' . $version;
+    $php = '/php-' . $version;
 
-        $jailer->buildJail($version);
+    $jailer->buildJail($version);
 
-        if(isset($opts['first-run'])) {
-            $jailer->setPermissions(0711);
-            $jailer->setOwnership('root', 'root');
-            $jailer->mountAll();
-        }
-        
-        $jailer->mkJailDir($php);
-        $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
-    } else {
-        echo 'You must set a version.' . PHP_EOL;
-        exit;
+    if(isset($opts['first-run'])) {
+        $jailer->setPermissions(0711);
+        $jailer->setOwnership('root', 'root');
+        $jailer->mountAll();
     }
+    
+    $jailer->mkJailDir($php);
+    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
 }
 ```
 
