@@ -1,12 +1,15 @@
 {
     "vendor": {
         "styles": [
-            "node_modules/bootstrap/scss/bootstrap.scss"
+            "node_modules/bootstrap/scss/bootstrap.scss",
+            "node_modules/codemirror/lib/codemirror.css"
         ],
         "css": "bundle.min.css",
         "scripts": [
             "node_modules/axios/dist/axios.min.js",
-            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "node_modules/codemirror/mode/clike/clike.js",
+            "node_modules/codemirror/mode/php/php.js"
         ],
         "js": "bundle.min.js"
     },

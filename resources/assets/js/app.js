@@ -18,3 +18,15 @@ form.addEventListener('submit', (e) => {
         console.log(error);
     });
 });
+
+
+var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    mode: "application/x-httpd-php",
+    theme: "monokai",
+    indentUnit: 2,
+    indentWithTabs: true
+});
+
+editor.setSize('auto', 600);

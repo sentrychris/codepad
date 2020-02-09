@@ -2,7 +2,9 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
     "axios": "^0.19.2",
-    "bootstrap": "^4.4.1"
+    "bootstrap": "^4.4.1",
+    "codemirror": "^5.51.0",
+    "dotenv": "^8.2.0"
   },
   "devDependencies": {
     "esm": "^3.2.25",

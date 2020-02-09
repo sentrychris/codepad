@@ -1,6 +1,7 @@
 {% extends 'layout.twig' %}
 
 {% block styles %}
+    <link rel="stylesheet" href="lib/monokai.css">
 {% endblock %}
 
 {% block content %}
@@ -19,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label for="code">Code:</label>
-                    <textarea class="form-control" name="code" id="code" cols="30" rows="10"></textarea>
+                    <textarea class="form-control" name="code" id="code" cols="50" rows="50"></textarea>
                 </div>
                 <button class="btn btn-success" type="submit">Submit</button>
             </form>
