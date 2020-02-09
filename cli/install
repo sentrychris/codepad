@@ -15,21 +15,21 @@ $short = 'v:';
 $long  = ['version:'];
 $opts  = getopt($short, $long);
 
-run(
-    $app['downloader'],
-    $app['compiler'],
-    $opts['version'] ?? $opts['v']
-);
+run($app['downloader'], $app['compiler'], $opts);
 
 /**
  * download/compile test method.
  *
  * @param Downloader $downloader
  * @param Compiler $compiler
- * @param string $version
+ * @param array $opts
  */
-function run(Downloader $downloader, Compiler $compiler, string $version)
+function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
+    if(!$version = env("JAIL_PHP_VERSION")) {
+        $version = $opts['version'] ?? $opts['v'];
+    }
+    
     try {
         $php = $downloader->setVersion($version)->download();
         $compiler->compile($php->getVersion(), $php->getTarget());
