@@ -16,7 +16,7 @@ if (!is_string($code)) {
     throw new \RuntimeException('failed to read the code from stdin! (stream_get_contents failed)');
 }
 
-$file = tempnam(env("CHROOT_ROOT"), 'unsafe');
+$file = tempnam(env('CHROOT_ROOT'), 'unsafe');
 if (!is_string($file)) {
     throw new \RuntimeException('tempnam failed!');
 }
@@ -31,7 +31,7 @@ if (!chmod($file, 0444)) {
 
 $starttime = microtime(true);
 $unused = [];
-$ph = proc_open('chroot --userspec=nobody '.env("CHROOT_ROOT").' /php-'.$argv[1].'/bin/php '.escapeshellarg(basename($file)), $unused, $unused);
+$ph = proc_open('chroot --userspec=nobody '.env('CHROOT_ROOT').' /php-'.$argv[1].'/bin/php '.escapeshellarg(basename($file)), $unused, $unused);
 $terminated = false;
 while (($status = proc_get_status($ph))['running']) {
     usleep(100 * 1000);

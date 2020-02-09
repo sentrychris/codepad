@@ -7,9 +7,9 @@ use Pimple\Container;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
+use Versyx\Codepad\Console\ChrootManager;
 use Versyx\Codepad\Console\Compiler;
 use Versyx\Codepad\Console\Downloader;
-use Versyx\Codepad\Console\ChrootManager;
 
 /*----------------------------------------
 | Create application container           |

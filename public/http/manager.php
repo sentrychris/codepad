@@ -35,7 +35,7 @@ if (str_replace($banned, '', $raw) != $raw) {
 }
 
 $pipes = [];
-$proc = proc_open("sudo ".env("CHROOT_ROOT")."/php-$ver/bin/php /var/www/".env('APP_NAME')."/public/http/worker.php $ver", [
+$proc = proc_open('sudo '.env('CHROOT_ROOT')."/php-$ver/bin/php /var/www/".env('APP_NAME')."/public/http/worker.php $ver", [
     0 => ['pipe', 'rb'],
     1 => ['pipe', 'wb'],
     2 => ['pipe', 'wb'],
