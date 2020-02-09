@@ -92,13 +92,6 @@ require __DIR__ . '/../config/bootstrap.php';
 
 run($app['downloader'], $app['compiler'], getopt('', ['version:']));
 
-/**
- * download/compile test method.
- *
- * @param Downloader $downloader
- * @param Compiler $compiler
- * @param array $opts
- */
 function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
     if(!$version = env("JAIL_PHP_VERSION")) {
