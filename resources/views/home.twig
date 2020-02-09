@@ -8,8 +8,8 @@
         <div class="col-md-6 col-xs-12">
             <form id="codepad">
                 <div class="form-group">
-                    <label class="form-check-label"> PHP Version:
-                        <select class="form-control" name="ver" id="ver">
+                    <label class="form-check-label label"> PHP Version:
+                        <select class="form-control mt-2" name="ver" id="ver">
                             <option value="7.3.14">7.3.14</option>
                             <option value="7.2.19">7.2.19</option>
                             <option value="7.1.30">7.1.30</option>
@@ -18,8 +18,8 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    <label for="code">Code:</label>
-                    <textarea class="form-control" name="code" id="code" cols="30" rows="10"></textarea>
+                    <label for="code" class="label">Code:</label>
+                    <textarea class="form-control" name="code" id="code" cols="50" rows="50"></textarea>
                 </div>
                 <button class="btn btn-success" type="submit">Submit</button>
             </form>
@@ -27,7 +27,7 @@
         <div class="col-md-6 col-xs-12">
             <div id="result" class="h-100">
                 <div class="form-group">
-                    <label for="data">Result:</label>
+                    <label for="data" class="label">Result:</label>
                     <pre class="form-control h-100" id="data"></pre>
                 </div>
             </div>
@@ -35,4 +35,16 @@
     </div>
 {% endblock %}
 {% block scripts %}
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            lineNumbers: true,
+            matchBrackets: true,
+            mode: "application/x-httpd-php",
+            theme: "monokai",
+            indentUnit: 2,
+            indentWithTabs: true
+        });
+
+        editor.setSize('auto', 600);
+    </script>
 {% endblock %}

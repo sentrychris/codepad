@@ -1,5 +1,8 @@
 [![StyleCI](https://github.styleci.io/repos/179174116/shield?branch=master)](https://github.styleci.io/repos/179174116)
 
+# Codepad
+
+![example deployment](resources/assets/img/codepad.png)
 
 ## Table of Contents
 
@@ -12,9 +15,7 @@
 * [Enabling the Worker](#enabling-the-worker)
   * [How it Works](#how-it-works)
 * [Preparing the UI](#preparing-the-ui)
-* [Deployment](#deployment)
-  * [Optional](#optional)
-
+* [Deployment](#deployment-help)
 
 ## System Requirements
 
@@ -306,11 +307,7 @@ $ gulp build
 
 Your application should now be ready to view!
 
-## Deployment
-
-![example deployment](resources/assets/img/codepad.png)
-
-### Optional
+## Deployment Help
 
 Download [this vagrant box](https://app.vagrantup.com/raekw0n/boxes/ubuntu16):
 

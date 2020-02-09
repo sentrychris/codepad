@@ -4,7 +4,7 @@
 /docs/*
 /node_modules
 /yarn-error.log
-php-*
+/storage/*
 /public/css/*
-/public/js/*
+/public/lib/*
 /public/cache/*

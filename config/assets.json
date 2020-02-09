@@ -1,7 +1,9 @@
 {
     "vendor": {
         "styles": [
-            "node_modules/bootstrap/scss/bootstrap.scss"
+            "node_modules/bootstrap/scss/bootstrap.scss",
+            "resources/assets/lib/codemirror.css",
+            "resources/assets/lib/monokai.css"
         ],
         "css": "bundle.min.css",
         "scripts": [
@@ -19,6 +21,18 @@
             "resources/assets/js/app.js"
         ],
         "js": "app.min.js"
+    },
+    "editor": {
+        "scripts": [
+            "resources/assets/lib/matchbrackets.js",
+            "resources/assets/lib/htmlmixed.js",
+            "resources/assets/lib/xml.js",
+            "resources/assets/lib/javascript.js",
+            "resources/assets/lib/css.js",
+            "resources/assets/lib/clike.js",
+            "resources/assets/lib/php.js"
+        ],
+        "js": "./public/lib"
     },
     "out": "./public"
 }
