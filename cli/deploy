@@ -5,7 +5,7 @@
 project="codepad"
 
 install_path="/var/www/codepad"
-jail_path="/opt/phpjail"
+chroot_path="/opt/phpchroot"
 
 site_domain="ubuntu.codepad.local"
 
@@ -33,18 +33,18 @@ for idx in "${!versions[@]}"
             echo "PHP ${versions[idx]} already compiled to ${install_path}/php-${versions[idx]}"
         fi
 
-        echo "Checking for pre-jailed PHP ${versions[idx]}"
-        if [ ! -d "${jail_path}/php-${versions[idx]}" ]; then
+        echo "Checking for pre-chrooted PHP ${versions[idx]}"
+        if [ ! -d "${chroot_path}/php-${versions[idx]}" ]; then
             if [ "$idx" == 0 ]; then
-                sudo php cli/build --jail="${jail_path}" --version="${versions[idx]}" --first-run=true
+                sudo php cli/chroot --root="${chroot_path}" --version="${versions[idx]}" --first-run=true
             else
-                sudo php cli/build --jail="${jail_path}" --version="${versions[idx]}"
+                sudo php cli/chroot --root="${chroot_path}" --version="${versions[idx]}"
             fi
             
             echo "Modifying sudoers file"
-            echo "www-data ALL =(ALL) NOPASSWD: ${jail_path}/php-${versions[idx]}/bin/php ${install_path}/public/http/worker.php ${versions[idx]}" | sudo EDITOR='tee -a' visudo
+            echo "www-data ALL =(ALL) NOPASSWD: ${chroot_path}/php-${versions[idx]}/bin/php ${install_path}/public/http/worker.php ${versions[idx]}" | sudo EDITOR='tee -a' visudo
         else
-            echo "PHP ${versions[idx]} already jailed to ${jail_path}/php-${versions[idx]}"
+            echo "PHP ${versions[idx]} already chrooted to ${chroot_path}/php-${versions[idx]}"
         fi
     done
 

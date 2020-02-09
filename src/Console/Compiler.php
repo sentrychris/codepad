@@ -9,7 +9,7 @@ use Exception;
  *
  * This class is responsible for extracting bzip2 archives obtained
  * via Versyx\Codepad\Downloader::download() and compiling them for
- * deployment to chroot jails.
+ * deployment to chroot environments.
  *
  * @author Chris Rowles <me@rowles.ch>
  */

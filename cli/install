@@ -18,7 +18,7 @@ run($app['downloader'], $app['compiler'], getopt('', ['version:']));
  */
 function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
-    if(!$version = env("JAIL_PHP_VERSION")) {
+    if(!$version = env("CHROOT_PHP_VERSION")) {
         $version = $opts['version'] ?? error('You must specify a version.');
     }
     

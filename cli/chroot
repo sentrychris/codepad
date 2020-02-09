@@ -1,0 +1,52 @@
+#!/usr/bin/env php
+
+<?php
+
+use Versyx\Codepad\Console\ChrootManager;
+
+require __DIR__ . '/../config/bootstrap.php';
+
+run($app['chroot-manager'], getopt('', ['root::', 'version:', 'first-run::']));
+
+/**
+ * Chroot builder method.
+ * 
+ * @param Chroot $cm
+ * @param string $version
+ */
+function run(ChrootManager $cm, array $opts)
+{
+    if(!$root = env("CHROOT_ROOT")) {
+        $root = $opts['root'] ?? error('You must specify a root path.');
+    }
+
+    $cm->setRoot($root);
+
+    if(env("CHROOT_DEVICES")) {
+        $cm->setDevices(explode(',', env("CHROOT_DEVICES")));
+    } else {
+        $cm->setDevices(['bin','dev','etc','lib','lib64','usr']);
+    }
+
+    if(!$version = env("CHROOT_PHP_VERSION")) {
+        $version = $opts['version'] ?? error('You must specify a version.');
+    }
+
+    $php = '/php-' . $version;
+
+    $cm->buildChroot($version);
+
+    if(isset($opts['first-run'])) {
+        $cm->setPermissions(0711);
+        $cm->setOwnership('root', 'root');
+        $cm->mountAll();
+    }
+    
+    $cm->mkChrootDir($php);
+    if(file_exists('/var/www/codepad' . $php)) {
+        $cm->mount('/var/www/codepad' . $php, $cm->getRoot() . $php, 'bind', 'ro');
+    } else {
+        $cm->mount('/tmp' . $php, $cm->getRoot() . $php, 'bind', 'ro');
+    }
+}
+

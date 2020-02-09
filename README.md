@@ -8,7 +8,7 @@
 * [Quick Install](#quick-install)
 * [Application Structure](#application-structure)
 * [Downloading & Compiling](#downloading--compiling)
-* [Creating the Jail](#creating-the-jail)
+* [Creating the Chroot Environment](#creating-the-chroot-environment)
 * [Enabling the Worker](#enabling-the-worker)
   * [How it Works](#how-it-works)
 * [Preparing the UI](#preparing-the-ui)
@@ -37,16 +37,16 @@ Compile PHP:
 $ php cli/install --version="<(string)version>"
 ```
 
-Create jail:
+Create chroot environment:
 ```bash
-$ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" --first-run="<(bool)first-run>"
+$ sudo php cli/chroot --root="<(string)chrootpath>" --version="<(string)version>" --first-run="<(bool)first-run>"
 ```
 
 Instead of passing options explicitly via the command line, you can also set them via environment variables in `.env`:
 ```bash
-JAIL_ROOT="/opt/phpjail"
-JAIL_DEVICES="bin,dev,etc,lib,lib64,usr"
-JAIL_PHP_VERSION="7.1.30"
+CHROOT_ROOT="/opt/phpchroot"
+CHROOT_DEVICES="bin,dev,etc,lib,lib64,usr"
+CHROOT_PHP_VERSION="7.1.30"
 ```
 
 ```bash
@@ -95,7 +95,7 @@ run($app['downloader'], $app['compiler'], getopt('', ['version:']));
 
 function run(Downloader $downloader, Compiler $compiler, array $opts)
 {
-    if(!$version = env("JAIL_PHP_VERSION")) {
+    if(!$version = env("CHROOT_PHP_VERSION")) {
         $version = $opts['version'] ?? error('You must specify a version.');
     }
     
@@ -110,47 +110,53 @@ function run(Downloader $downloader, Compiler $compiler, array $opts)
 
 ```
 
-## Creating the Jail
+## Creating the Chroot Environment
 
 ```php
+#!/usr/bin/env php
+
 <?php
 
-use Versyx\Codepad\Console\Jailer;
+use Versyx\Codepad\Console\ChrootManager;
 
 require __DIR__ . '/../config/bootstrap.php';
 
-run($app['jailer'], getopt('', ['jail::', 'version:', 'first-run::']));
+run($app['chroot-manager'], getopt('', ['root::', 'version:', 'first-run::']));
 
-function run(Jailer $jailer, array $opts)
+function run(ChrootManager $cm, array $opts)
 {
-    if(!$jail = env("JAIL_ROOT")) {
-        $jail = $opts['jail'] ?? error('You must specify a root path.');
+    if(!$root = env("CHROOT_ROOT")) {
+        $root = $opts['root'] ?? error('You must specify a root path.');
     }
 
-    $jailer->setRoot($jail);
+    $cm->setRoot($root);
 
-    if(env("JAIL_DEVICES")) {
-        $jailer->setDevices(explode(',', env("JAIL_DEVICES")));
+    if(env("CHROOT_DEVICES")) {
+        $cm->setDevices(explode(',', env("CHROOT_DEVICES")));
     } else {
-        $jailer->setDevices(['bin','dev','etc','lib','lib64','usr']);
+        $cm->setDevices(['bin','dev','etc','lib','lib64','usr']);
     }
 
-    if(!$version = env("JAIL_PHP_VERSION")) {
+    if(!$version = env("CHROOT_PHP_VERSION")) {
         $version = $opts['version'] ?? error('You must specify a version.');
     }
 
     $php = '/php-' . $version;
 
-    $jailer->buildJail($version);
+    $cm->buildChroot($version);
 
     if(isset($opts['first-run'])) {
-        $jailer->setPermissions(0711);
-        $jailer->setOwnership('root', 'root');
-        $jailer->mountAll();
+        $cm->setPermissions(0711);
+        $cm->setOwnership('root', 'root');
+        $cm->mountAll();
     }
     
-    $jailer->mkJailDir($php);
-    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+    $cm->mkChrootDir($php);
+    if(file_exists('/var/www/codepad' . $php)) {
+        $cm->mount('/var/www/codepad' . $php, $cm->getRoot() . $php, 'bind', 'ro');
+    } else {
+        $cm->mount('/tmp' . $php, $cm->getRoot() . $php, 'bind', 'ro');
+    }
 }
 ```
 
@@ -162,14 +168,14 @@ You'll need to allow www-data to run the worker script as a privileged user, add
 
 ubuntu:
 ```bash
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
-www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
+www-data ALL =(ALL) NOPASSWD: /opt/phpchroot/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
+www-data ALL =(ALL) NOPASSWD: /opt/phpchroot/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
 
 centos:
 ```bash
-apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
-apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
+apache ALL =(ALL) NOPASSWD: /opt/phpchroot/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
+apache ALL =(ALL) NOPASSWD: /opt/phpchroot/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
 
 This will restrict `www-data`'s|`apache`'s sudo privileges to only running the worker.
@@ -181,7 +187,7 @@ base64 decodes the data and runs a check on the code input against disabled func
 comes back clean, a new process is created with the following stream resources:
 
 ```php
-$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME") . "/public/http/worker.php $ver", [
+$proc = proc_open("sudo /opt/phpchroot/php-$ver/bin/php /var/www/" . env("APP_NAME") . "/public/http/worker.php $ver", [
     0 => ["pipe", "rb"],
     1 => ["pipe", "wb"],
     2 => ["pipe", "wb"]
@@ -189,14 +195,14 @@ $proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME
 ```
 
 The PHP code is passed to `http/worker.php` from the manager via STDIN, the worker then creates a temporary file in
-`/opt/phpjail`, sets its permissions to `0444` and then executes the file using the selected PHP version
-instance, which is chrooted to `/opt/phpjail` as user `nobody`. If the code takes longer than five seconds to execute, 
+`/opt/phpchroot`, sets its permissions to `0444` and then executes the file using the selected PHP version
+instance, which is chrooted to `/opt/phpchroot` as user `nobody`. If the code takes longer than five seconds to execute, 
 the process will terminate.
 
 ```php
 $starttime = microtime(true);
 $unused = [];
-$ph = proc_open('chroot --userspec=nobody /opt/phpjail /php-' . $argv[1] .'/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
+$ph = proc_open('chroot --userspec=nobody /opt/phpchroot /php-' . $argv[1] .'/bin/php ' . escapeshellarg(basename($file)), $unused, $unused);
 $terminated = false;
 while (($status = proc_get_status($ph)) ['running']) {
     usleep(100 * 1000);
@@ -333,7 +339,7 @@ Configure the following variables in - `cli\deploy`:
 project="your-project-name"
 
 install_path="/var/www/your-project-name"
-jail_path="/path/to/jail"
+chroot_path="/path/to/chroot"
 
 site_domain="your-domain.local"
 

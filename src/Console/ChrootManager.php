@@ -3,14 +3,14 @@
 namespace Versyx\Codepad\Console;
 
 /**
- * PHP Jailer.
+ * Set up chroot environment for PHP versions.
  *
  * This class is responsible for isolating compiled PHP versions
- * to configured chroot jails.
+ * to the configured chroot environment.
  *
  * @author Chris Rowles <me@rowles.ch>
  */
-class Jailer extends Console
+class ChrootManager extends Console
 {
     /** @var $root */
     protected $root;
@@ -19,7 +19,7 @@ class Jailer extends Console
     protected $fs;
 
     /**
-     * Jailer constructor.
+     * Chroot constructor.
      *
      * @param $debug
      */
@@ -29,15 +29,15 @@ class Jailer extends Console
     }
 
     /**
-     * Build jail.
+     * Build chroot environment.
      *
      * @param string $version
      */
-    public function buildJail(string $version)
+    public function buildChroot(string $version)
     {
         if (!file_exists($this->root)) {
             if ($this->isDebug()) {
-                echo 'Creating jail...'.PHP_EOL;
+                echo 'Creating '.$this->root.'...'.PHP_EOL;
             }
             mkdir($this->root);
         }
@@ -149,7 +149,7 @@ class Jailer extends Console
      *
      * @return void
      */
-    public function mkJailDir(string $device): void
+    public function mkChrootdir(string $device): void
     {
         mkdir($this->root.$device);
     }

@@ -9,7 +9,7 @@ use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Versyx\Codepad\Console\Compiler;
 use Versyx\Codepad\Console\Downloader;
-use Versyx\Codepad\Console\Jailer;
+use Versyx\Codepad\Console\ChrootManager;
 
 /*----------------------------------------
 | Create application container           |
@@ -31,15 +31,10 @@ $app['compiler'] = function () {
     return $compiler;
 };
 
-$app['jailer'] = function () {
-    $jailer = new Jailer(env('APP_DEBUG'));
+$app['chroot-manager'] = function () {
+    $cm = new ChrootManager(env('APP_DEBUG'));
 
-    if (env('JAIL_DEVICES')) {
-        $devices = explode(',', env('JAIL_DEVICES'));
-        $jailer->setDevices($devices);
-    }
-
-    return $jailer;
+    return $cm;
 };
 
 $app['log'] = function () {
