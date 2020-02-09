@@ -58,7 +58,7 @@ function convert(array $input)
     $r = [];
     foreach ($input as $dotted) {
         $keys = explode('.', $dotted);
-        $c = &$r[array_shift($keys)]; 
+        $c = &$r[array_shift($keys)];
         foreach ($keys as $key) {
             if (isset($c[$key]) && $c[$key] === true) {
                 $c[$key] = [];
@@ -69,5 +69,6 @@ function convert(array $input)
             $c = true;
         }
     }
+
     return $r;
 }

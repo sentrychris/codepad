@@ -1,15 +1,15 @@
 <?php
 
-use Monolog\Logger;
-use Twig\Environment;
-use Pimple\Container;
 use Klein\Klein as Router;
-use Twig\Loader\FilesystemLoader;
-use Twig\Extension\DebugExtension;
 use Monolog\Handler\StreamHandler;
-use Versyx\Codepad\Console\Jailer;
+use Monolog\Logger;
+use Pimple\Container;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
 use Versyx\Codepad\Console\Compiler;
 use Versyx\Codepad\Console\Downloader;
+use Versyx\Codepad\Console\Jailer;
 
 /*----------------------------------------
 | Create application container           |
@@ -19,23 +19,23 @@ $app = new Container();
 /*----------------------------------------
 | Load application dependencies           |
 -----------------------------------------*/
-$app['downloader'] = function() {
-    $downloader = new Downloader(env("APP_DEBUG"));
-    
+$app['downloader'] = function () {
+    $downloader = new Downloader(env('APP_DEBUG'));
+
     return $downloader;
 };
 
-$app['compiler'] = function() {
-    $compiler = new Compiler(env("APP_DEBUG"));
+$app['compiler'] = function () {
+    $compiler = new Compiler(env('APP_DEBUG'));
 
     return $compiler;
 };
 
-$app['jailer'] = function() {
-    $jailer = new Jailer(env("APP_DEBUG"));
+$app['jailer'] = function () {
+    $jailer = new Jailer(env('APP_DEBUG'));
 
-    if(env("JAIL_DEVICES")) {
-        $devices = explode(",", env("JAIL_DEVICES"));
+    if (env('JAIL_DEVICES')) {
+        $devices = explode(',', env('JAIL_DEVICES'));
         $jailer->setDevices($devices);
     }
 

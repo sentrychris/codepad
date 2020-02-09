@@ -2,7 +2,7 @@
 
 require __DIR__.'/../../config/bootstrap.php';
 
-$request = json_decode(file_get_contents("php://input"), true);
+$request = json_decode(file_get_contents('php://input'), true);
 $data = $request['data'];
 
 if (isBase64($data['code']) && isBase64($data['ver'])) {
