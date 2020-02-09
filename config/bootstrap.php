@@ -22,5 +22,4 @@ require __DIR__.'/../config/controllers.php';
 ----------------------------------------*/
 require __DIR__.'/../config/routes.php';
 
-
 define('APP_VERSION', '1.0.0');

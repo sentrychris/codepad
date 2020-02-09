@@ -18,6 +18,7 @@ class HomeController extends Controller
     {
         $data['version'] = env('APP_VERSION');
         $viewData = $this->viewData($data);
+
         return $this->render('home.twig', $viewData);
     }
 }
