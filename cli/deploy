@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# Using https://app.vagrantup.com/raekw0n/boxes/ubuntu16
+
+install_path="/var/www/codepad"
+jail_path="/opt/phpjail"
+
+site_available="/etc/apache2/sites-available/ubuntu.codepad.local.conf"
+site_enabled="/etc/apache2/sites-enabled/ubuntu.codepad.local.conf"
+
+if [ ! -d ./vendor ]; then
+    echo "Installing backend dependencies"
+    composer install
+fi
+
+declare -a versions=(
+    "7.0.33"
+    "7.1.30"
+    "7.2.19"
+    "7.3.14"
+)
+
+for idx in "${!versions[@]}"
+    do
+        echo "Checking for pre-compiled PHP ${versions[idx]}"
+        if [ ! -d "${install_path}/php-${versions[idx]}" ]; then
+            sudo php cli/install --version="${versions[idx]}"
+        else
+            echo "PHP ${versions[idx]} already compiled to ${install_path}/php-${versions[idx]}"
+        fi
+
+        echo "Checking for pre-jailed PHP ${versions[idx]}"
+        if [ ! -d "${jail_path}/php-${versions[idx]}" ]; then
+            if [ "$idx" == 0 ]; then
+                sudo php cli/build --jail="${jail_path}" --version="${versions[idx]}" --first-run=true
+            else
+                sudo php cli/build --jail="${jail_path}" --version="${versions[idx]}"
+            fi
+            
+            echo "Modifying sudoers file"
+            echo "www-data ALL =(ALL) NOPASSWD: ${jail_path}/php-${versions[idx]}/bin/php ${install_path}/public/http/worker.php ${versions[idx]}" | sudo EDITOR='tee -a' visudo
+        else
+            echo "PHP ${versions[idx]} already jailed to ${jail_path}/php-${versions[idx]}"
+        fi
+    done
+
+if [ ! -d ./node_modules ]; then
+    echo "Installing frontend dependencies"
+    npm install
+fi
+
+if [[ ! -d ./public/css || ! -d ./public/js  ]]; then
+    echo "Compiling frontend assets"
+    ./node_modules/.bin/gulp build --default
+fi
+
+if [[ ! -f "${site_available}" || ! -f "${site_enabled}" ]]; then
+    echo "Configuring virtualhost"
+    sudo vhost create ubuntu.codepad.local codepad/public
+else
+    echo "Restarting apache webserver"
+    sudo systemctl restart apache2.service
+fi

@@ -63,7 +63,7 @@ $ sudo php cli/build
 │   ├── controllers.php     # Place to register application controllers
 │   ├── dependencies.php    # Place to register application dependencies
 │   └── routes.php          # Place to register application routes
-├── node_modules            # Reserved for Yarn
+├── node_modules            # Reserved for NPM
 ├── public                  # Entry, web and cache files
 ├── resources               # Application resources
 │   ├── assets              # Raw, un-compiled assets such as media, SASS and JavaScript
@@ -213,7 +213,7 @@ proc_close($ph);
 
 ### Build assets
 
-Codepad uses Yarn to manage front-end dependencies such as Bootstrap and gulp to build and minify raw assets such as SCSS, JS and other media. The existing tasks in gulpfile.esm.js shouldn’t need to be touched, as all paths to assets are configured via `config/assets.json`:
+Codepad uses NPM to manage front-end dependencies such as Bootstrap and gulp to build and minify raw assets such as SCSS, JS and other media. The existing tasks in gulpfile.esm.js shouldn’t need to be touched, as all paths to assets are configured via `config/assets.json`:
 
 ```json
 {
@@ -289,7 +289,7 @@ exports.build   = series(styles, scripts);
 
 To install assets, run:
 ```bash
-$ yarn
+$ npm install
 ```
 
 To compile assets, run:
@@ -299,6 +299,21 @@ $ gulp build
 
 Your application should now be ready to view!
 
-## Example Deployment
+## Deployment
 
 ![example deployment](resources/assets/img/codepad.png)
+
+### Optional
+
+Download and initalise [this vagrant box](https://app.vagrantup.com/raekw0n/boxes/ubuntu16):
+
+```bash
+$ vagrant box add raekw0n/ubuntu16
+$ vagrant init raekw0n/ubuntu16
+$ vagrant up
+```
+
+SSH into it and run the `cli/deploy` provisioning script:
+```bash
+$ ./cli/deploy
+```
