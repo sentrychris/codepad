@@ -2,11 +2,11 @@
 <?php
 
 /*----------------------------------------
- | Bootstrap the application              |
- ----------------------------------------*/
+| Bootstrap the application              |
+----------------------------------------*/
 require_once __DIR__.'/../config/bootstrap.php';
 
 /*----------------------------------------
- | Dispatch the application               |
- ----------------------------------------*/
+| Dispatch the application               |
+----------------------------------------*/
 $app['router']->dispatch();
