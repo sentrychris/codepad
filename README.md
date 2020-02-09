@@ -1,7 +1,7 @@
 [![StyleCI](https://github.styleci.io/repos/179174116/shield?branch=master)](https://github.styleci.io/repos/179174116)
 
 
-## Table of contents
+## Table of Contents
 
 * [System Requirements](#system-requirements)
   * [Optional](#optional)
@@ -171,13 +171,13 @@ You'll need to allow www-data to run the worker script as a privileged user, add
 
 
 ubuntu:
-```
+```bash
 www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
 www-data ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
 
 centos:
-```
+```bash
 apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.3.6/bin/php /var/www/codepad/public/http/worker.php 7.3.6
 apache ALL =(ALL) NOPASSWD: /opt/phpjail/php-7.0.33/bin/php /var/www/codepad/public/http/worker.php 7.0.33
 ```
@@ -188,7 +188,7 @@ This will restrict `www-data`'s|`apache`'s sudo privileges to only running the w
 
 The PHP code and version is base64 encoded and submitted to `http/manager.php`, the manager then 
 base64 decodes the data and runs a check on the code input against disabled functions, if the check
-comes back clean, a new process is created with stream resources:
+comes back clean, a new process is created with the following stream resources:
 
 ```php
 $proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME") . "/public/http/worker.php $ver", [
@@ -219,6 +219,51 @@ while (($status = proc_get_status($ph)) ['running']) {
 
 proc_close($ph);
 ```
+
+## Preparing the UI
+
+### Build assets
+
+Codepad uses Yarn to manage front-end dependencies such as Bootstrap and gulp to build and minify raw assets such as SCSS, JS and other media. The existing tasks in gulpfile.esm.js shouldn’t need to be touched, as all paths to assets are configured via `config/assets.json`:
+
+```json
+{
+    "vendor": {
+        "styles": [
+            "node_modules/bootstrap/scss/bootstrap.scss"
+        ],
+        "css": "bundle.min.css",
+        "scripts": [
+            "node_modules/axios/dist/axios.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+        ],
+        "js": "bundle.min.js"
+    },
+    "app": {
+        "styles": [
+            "resources/assets/scss/app.scss"
+        ],
+        "css": "app.min.css",
+        "scripts": [
+            "resources/assets/js/app.js"
+        ],
+        "js": "app.min.js"
+    },
+    "out": "./public"
+}
+```
+
+To install assets, run:
+```bash
+$ yarn
+```
+
+To compile assets, run:
+```bash
+$ gulp build
+```
+
+Your application should now be ready to view!
 
 ## Example Deployment
 
