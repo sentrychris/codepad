@@ -12,7 +12,8 @@
 * [Enabling the Worker](#enabling-the-worker)
   * [How it Works](#how-it-works)
 * [Preparing the UI](#preparing-the-ui)
-* [Example Deployment](#example-deployment)
+* [Deployment](#deployment)
+  * [optional](#optional)
 
 
 ## System Requirements
@@ -315,5 +316,6 @@ $ vagrant up
 
 SSH into it and run the `cli/deploy` provisioning script:
 ```bash
+$ cd /var/www/codepad
 $ ./cli/deploy
 ```
