@@ -30,10 +30,10 @@ $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" -
 ```php
 <?php
 
-use Versyx\Codepad\Downloader;
-use Versyx\Codepad\Compiler;
+require_once __DIR__.'/../vendor/autoload.php';
 
-require __DIR__ . '/../config/bootstrap.php';
+use Versyx\Codepad\Downloader\Cli;
+use Versyx\Codepad\Compiler\Cli;
 
 $debug = true;
 $version = "7.1.30";
@@ -57,9 +57,9 @@ function run(Downloader $downloader, Compiler $compiler, string $version)
 ```php
 <?php
 
-use Versyx\Codepad\Jailer;
+require_once __DIR__.'/../vendor/autoload.php';
 
-require __DIR__ . '/../config/bootstrap.php';
+use Versyx\Codepad\Cli\Jailer;
 
 $debug = true;
 $version = "7.1.30";
@@ -113,7 +113,7 @@ base64 decodes the data and runs a check on the code input against disabled func
 comes back clean, a new process is created with stream resources:
 
 ```php
-$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME) . "/http/worker.php $ver", [
+$proc = proc_open("sudo /opt/phpjail/php-$ver/bin/php /var/www/" . env("APP_NAME") . "/public/http/worker.php $ver", [
     0 => ["pipe", "rb"],
     1 => ["pipe", "wb"],
     2 => ["pipe", "wb"]
@@ -144,4 +144,4 @@ proc_close($ph);
 
 ## Example Deployment
 
-![example deployment](codepad.png)
+![example deployment](resources/assets/img/codepad.png)
