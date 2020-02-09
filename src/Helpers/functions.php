@@ -55,11 +55,11 @@ function isBase64(string $string)
 
 /**
  * Print errors.
- * 
+ *
  * @param string msg
  */
 function error(string $msg)
 {
-    echo $msg . PHP_EOL;
+    echo $msg.PHP_EOL;
     exit;
 }
