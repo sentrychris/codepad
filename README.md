@@ -4,7 +4,7 @@
 ## Table of Contents
 
 * [System Requirements](#system-requirements)
-  * [Optional](#optional)
+  * [Optional Requirements](#optional-requirements)
 * [Quick Install](#quick-install)
 * [Application Structure](#application-structure)
 * [Downloading & Compiling](#downloading--compiling)
@@ -13,7 +13,7 @@
   * [How it Works](#how-it-works)
 * [Preparing the UI](#preparing-the-ui)
 * [Deployment](#deployment)
-  * [optional](#optional)
+  * [Optional](#optional)
 
 
 ## System Requirements
@@ -24,7 +24,7 @@
 - libxml2-dev
 - libtidy-dev
 
-### Optional
+### Optional Requirements
 
 - bison
 - re2c
