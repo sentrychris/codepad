@@ -22,6 +22,11 @@
         "ext-bz2": "*",
         "ext-curl": "*",
         "ext-posix": "*",
-        "vlucas/phpdotenv": "^3.3"
+        "vlucas/phpdotenv": "^3.3",
+        "psy/psysh": "@stable",
+        "twig/twig": "^2.0",
+        "pimple/pimple": "^3.2",
+        "monolog/monolog": "^2.0",
+        "klein/klein": "^2.1"
     }
 }

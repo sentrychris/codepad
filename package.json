@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.9.0",
+    "axios": "^0.19.2",
+    "bootstrap": "^4.4.1"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25",
+    "gulp": "^4.0.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^6.0.0",
+    "gulp-load-plugins": "^1.6.0",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify-es": "^1.0.4"
+  }
+}

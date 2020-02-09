@@ -1,0 +1,24 @@
+{
+    "vendor": {
+        "styles": [
+            "node_modules/bootstrap/scss/bootstrap.scss"
+        ],
+        "css": "bundle.min.css",
+        "scripts": [
+            "node_modules/axios/dist/axios.min.js",
+            "node_modules/bootstrap/dist/js/bootstrap.min.js"
+        ],
+        "js": "bundle.min.js"
+    },
+    "app": {
+        "styles": [
+            "resources/assets/scss/app.scss"
+        ],
+        "css": "app.min.css",
+        "scripts": [
+            "resources/assets/js/app.js"
+        ],
+        "js": "app.min.js"
+    },
+    "out": "./public"
+}

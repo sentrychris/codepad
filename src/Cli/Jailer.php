@@ -1,6 +1,6 @@
 <?php
 
-namespace Versyx\Codepad;
+namespace Versyx\Codepad\Cli;
 
 /**
  * PHP Jailer.

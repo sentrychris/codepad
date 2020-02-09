@@ -2,3 +2,5 @@
 /.idea
 .env
 /docs/*
+/node_modules
+/yarn-error.log

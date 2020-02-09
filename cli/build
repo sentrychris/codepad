@@ -2,7 +2,7 @@
 
 <?php
 
-use Versyx\Codepad\Jailer;
+use Versyx\Codepad\Cli\Jailer;
 
 require __DIR__ . '/../config/bootstrap.php';
 
@@ -41,6 +41,11 @@ function run(Jailer $jailer, array $opts)
 
     // Add compiled PHP instance
     $php = '/php-' . $version;
+    $jailer->mkJailDir($php);
+    $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
+
+    // Add extra
+    $php = '/php-7.2.19';
     $jailer->mkJailDir($php);
     $jailer->mount('/tmp' . $php, $jailer->getRoot() . $php, 'bind', 'ro');
 }
