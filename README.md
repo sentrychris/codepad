@@ -3,9 +3,11 @@
 
 ## Table of contents
 
+* [System Requirements](#system-requirements)
+  * [Optional](#optional)
 * [Quick Install](#quick-install)
 * [Application Structure](#application-structure)
-* [Documentation](#documentation)
+* [Downloading & Compiling](#downloading--compiling)
   * [Services](#services)
   * [Controllers](#controllers)
   * [Views](#views)
@@ -13,13 +15,14 @@
 * [Frontend](#frontend)
 
 ## System Requirements
+
 - build-essential 
 - pkg-config
 - libcurl4-openssl-dev
 - libxml2-dev
 - libtidy-dev
 
-#### Optional
+### Optional
 
 - bison
 - re2c
