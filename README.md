@@ -11,6 +11,7 @@
 * [Creating the Jail](#creating-the-jail)
 * [Enabling the Worker](#enabling-the-worker)
   * [How it Works](#how-it-works)
+* [Preparing the UI](#preparing-the-ui)
 * [Example Deployment](#example-deployment)
 
 
@@ -29,7 +30,7 @@
 
 ## Quick install
 
-Install PHP:
+Compile PHP:
 
 ```bash
 $ php cli/install --version="<(string)version>"
@@ -43,7 +44,8 @@ $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>"
 ## Application Structure
 ```
 .
-├── config
+├── cli                     # Console commands
+├── config                  # Application config files
 │   ├── .env                # Environment variables
 │   ├── assets.json         # Front-end assets to compile
 │   ├── bootstrap.php       # Application bootstrapper
@@ -55,10 +57,10 @@ $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>"
 ├── resources               # Application resources
 │   ├── assets              # Raw, un-compiled assets such as media, SASS and JavaScript
 │   ├── views               # View templates (twig)
-├── src                     # PHP source code (The App namespace)
-│   ├── Console             # Console commands
+├── src                     # Appliation source code
+│   ├── Console             # Console command classes
 │   ├── Frontend            # Configuration files
-│       ├── Controllers     # Frontend controllers
+│       └── Controllers     # Frontend controllers
 ├── vendor                  # Reserved for Composer
 ├── composer.json           # Composer dependencies
 ├── gulpfile.esm.js         # Gulp configuration
@@ -251,6 +253,51 @@ Codepad uses Yarn to manage front-end dependencies such as Bootstrap and gulp to
     },
     "out": "./public"
 }
+```
+
+Example gulp tasks:
+```js
+import config from './config/assets';
+import { src, dest, series } from 'gulp';
+import plugins from 'gulp-load-plugins';
+
+const plugin = plugins();
+
+function styles(cb) {
+    src(config.vendor.styles)
+        .pipe(plugin.sass({outputStyle: 'compressed'}))
+        .pipe(plugin.concat(config.vendor.css))
+        .pipe(dest(config.out + '/css'));
+
+    src(config.app.styles)
+        .pipe(plugin.sass({outputStyle: 'compressed'}))
+        .pipe(plugin.concat(config.app.css))
+        .pipe(dest(config.out + '/css'));
+
+    cb();
+}
+
+function scripts(cb) {
+    
+    src(config.vendor.scripts)
+        .pipe(plugin.sourcemaps.init())
+        .pipe(plugin.concat(config.vendor.js))
+        .pipe(plugin.sourcemaps.write('./'))
+        .pipe(dest(config.out + '/js'));
+
+    src(config.app.scripts)
+        .pipe(plugin.rename(config.app.js))
+        .pipe(plugin.sourcemaps.init())
+        .pipe(plugin.uglifyEs.default())
+        .pipe(plugin.sourcemaps.write('./'))
+        .pipe(dest(config.out + '/js'));
+
+    cb();
+}
+
+exports.styles  = styles;
+exports.scripts = scripts;
+exports.build   = series(styles, scripts);
 ```
 
 To install assets, run:
