@@ -32,8 +32,8 @@ $ sudo php cli/build --jail="<(string)jailpath>" --version="<(string)version>" -
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Versyx\Codepad\Downloader\Cli;
-use Versyx\Codepad\Compiler\Cli;
+use Versyx\Codepad\Cli\Downloader;
+use Versyx\Codepad\Cli\Compiler;
 
 $debug = true;
 $version = "7.1.30";
