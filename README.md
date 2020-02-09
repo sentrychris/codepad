@@ -306,12 +306,42 @@ Your application should now be ready to view!
 
 ### Optional
 
-Download and initalise [this vagrant box](https://app.vagrantup.com/raekw0n/boxes/ubuntu16):
+Download [this vagrant box](https://app.vagrantup.com/raekw0n/boxes/ubuntu16):
 
 ```bash
 $ vagrant box add raekw0n/ubuntu16
 $ vagrant init raekw0n/ubuntu16
+```
+
+Edit your Vagrantfile to create a symbolic link between the directory containing your projects and `/var/www`:
+```ruby
+Vagrant.configure("2") do |config|
+    config.vm.box = "raekw0n/ubuntu16"
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+    ...
+    config.vm.synced_folder "/host/path/to/projects", "/var/www"
+end
+```
+
+Launch the VM:
+```bash
 $ vagrant up
+```
+
+Configure the following variables in - `cli\deploy`:
+```bash
+project="your-project-name"
+
+install_path="/var/www/your-project-name"
+jail_path="/path/to/jail"
+
+site_domain="your-domain.local"
+
+declare -a versions=(
+    "7.0.33"
+    "7.1.30"
+    "..."
+)
 ```
 
 SSH into it and run the `cli/deploy` provisioning script:

@@ -2,11 +2,15 @@
 
 # Using https://app.vagrantup.com/raekw0n/boxes/ubuntu16
 
+project="codepad"
+
 install_path="/var/www/codepad"
 jail_path="/opt/phpjail"
 
-site_available="/etc/apache2/sites-available/ubuntu.codepad.local.conf"
-site_enabled="/etc/apache2/sites-enabled/ubuntu.codepad.local.conf"
+site_domain="ubuntu.codepad.local"
+
+site_available="/etc/apache2/sites-available/${site_domain}.conf"
+site_enabled="/etc/apache2/sites-enabled/${site_domain}.conf"
 
 if [ ! -d ./vendor ]; then
     echo "Installing backend dependencies"
@@ -56,7 +60,7 @@ fi
 
 if [[ ! -f "${site_available}" || ! -f "${site_enabled}" ]]; then
     echo "Configuring virtualhost"
-    sudo vhost create ubuntu.codepad.local codepad/public
+    sudo vhost create "${site_domain}" "${project}/public"
 else
     echo "Restarting apache webserver"
     sudo systemctl restart apache2.service
