@@ -3,7 +3,7 @@
 <head>
     <title>{{ title }}</title>
     <meta http-equiv="refresh" content="300">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/bundle.min.css">
     <link rel="stylesheet" href="css/app.min.css">
     <link href="https://fonts.googleapis.com/css?family=Lato|Source+Sans+Pro:200,400,700" rel="stylesheet">
@@ -22,11 +22,16 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNavBar">
                 <ul class="navbar-nav ml-auto p-2">
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">PHP Editor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/frontend">Frontend Editor</a>
+                    </li>
                 </ul>
             </div>
         </nav>
-        <div class="container my-5">
+        <div class={% block containerClass %}"container my-5"{% endblock %}>
             {% block content %}
             {% endblock %}
         </div>

@@ -5,7 +5,7 @@ namespace Versyx\Codepad\Frontend\Controllers;
 /**
  * Home controller class.
  */
-class HomeController extends Controller
+class FrontendEditorController extends Controller
 {
     /**
      * Render the home page.
@@ -17,6 +17,6 @@ class HomeController extends Controller
     public function view(array $data = [])
     {
         $viewData = $this->viewData($data);
-        return $this->render('home.twig', $viewData);
+        return $this->render('editors/frontend.twig', $viewData);
     }
 }
