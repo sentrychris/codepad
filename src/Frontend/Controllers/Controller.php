@@ -31,6 +31,8 @@ abstract class Controller
         $this->log = $container['log'];
         $this->router = $container['router'];
         $this->view = $container['view'];
+
+        $this->data['version'] = env('APP_VERSION');
     }
 
     /**

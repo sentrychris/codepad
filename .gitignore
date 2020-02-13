@@ -2,6 +2,7 @@
 /.idea
 .env
 /docs/*
+/php-*
 /node_modules
 /yarn-error.log
 /storage/*
