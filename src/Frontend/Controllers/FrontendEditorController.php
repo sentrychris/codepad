@@ -17,6 +17,7 @@ class FrontendEditorController extends Controller
     public function view(array $data = [])
     {
         $viewData = $this->viewData($data);
+
         return $this->render('editors/frontend.twig', $viewData);
     }
 }
