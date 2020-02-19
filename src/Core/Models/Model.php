@@ -5,7 +5,7 @@ namespace Versyx\Codepad\Core\Models;
 use Pimple\Container;
 
 /**
- * Abstract Class Model
+ * Abstract Class Model.
  */
 abstract class Model
 {

@@ -5,10 +5,10 @@ namespace Versyx\Codepad\Core;
 use PDO;
 
 /**
- * Class Database
+ * Class Database.
  */
-class Database {
-
+class Database
+{
     private $dbh;
     private $stmt;
 
@@ -19,15 +19,15 @@ class Database {
      */
     public function __construct()
     {
-        $dsn = 'mysql:host=' . env('DB_HOST') . ';dbname=' . env('DB_NAME');
+        $dsn = 'mysql:host='.env('DB_HOST').';dbname='.env('DB_NAME');
         $options = [
             PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE    => PDO::ERRMODE_EXCEPTION,
         ];
 
         try {
             $this->dbh = new PDO($dsn, env('DB_USER'), env('DB_PASS'), $options);
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error = $e->getMessage();
             app('log')->error($this->error);
         }
@@ -81,6 +81,7 @@ class Database {
     public function resultset()
     {
         $this->execute();
+
         return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -90,6 +91,7 @@ class Database {
     public function single()
     {
         $this->execute();
+
         return $this->stmt->fetch(PDO::FETCH_ASSOC);
     }
 

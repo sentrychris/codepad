@@ -2,15 +2,14 @@
 
 namespace Versyx\Codepad\Core\Extensions\Twig;
 
-use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
- * Class AssetExtension
+ * Class AssetExtension.
  */
 class AssetExtension extends AbstractExtension
 {
-
     /** @var string $path */
     private $path;
 
@@ -46,12 +45,13 @@ class AssetExtension extends AbstractExtension
      *
      * @param string $uri
      * @param string $file
+     *
      * @return string
      */
     private function url($uri, $file)
     {
-        if (!preg_match('%^/(?!.*/$)(?!.*[/]{2,})(?!.*\?.*\?)(?!.*\./).*%im', $uri)){;
-            app('log')->error('Could not validate uri: ' . $uri . ' for file: ' . $file);
+        if (!preg_match('%^/(?!.*/$)(?!.*[/]{2,})(?!.*\?.*\?)(?!.*\./).*%im', $uri)) {
+            app('log')->error('Could not validate uri: '.$uri.' for file: '.$file);
         }
 
         // TODO Handle consecutive slashes
@@ -59,14 +59,14 @@ class AssetExtension extends AbstractExtension
         // However, URLs don't have to map to fs paths, so
         // rewriting or something will need to happen.
 
-        if(substr_count($uri, '//') > 0) {
+        if (substr_count($uri, '//') > 0) {
             app('log')->debug('true');
         }
 
         $depth = substr_count($uri, '/');
         $prefix = '/';
         if ($depth > 1) {
-            for ($i=0; $i < $depth; $i++) {
+            for ($i = 0; $i < $depth; $i++) {
                 $prefix .= '../';
             }
 
@@ -76,21 +76,21 @@ class AssetExtension extends AbstractExtension
         $parts = pathinfo($file);
 
         switch ($parts['extension']) {
-            case "gif":
-            case "jpg":
-            case "png":
-            case "svg":
-            case "webp":
-                $this->asset = $this->path . 'images/' . $file;
+            case 'gif':
+            case 'jpg':
+            case 'png':
+            case 'svg':
+            case 'webp':
+                $this->asset = $this->path.'images/'.$file;
                 break;
-            case "css":
-                $this->asset = $this->path . 'css/' . $file;
+            case 'css':
+                $this->asset = $this->path.'css/'.$file;
                 break;
-            case "js":
-                $this->asset = $this->path . 'js/' . $file;
+            case 'js':
+                $this->asset = $this->path.'js/'.$file;
                 break;
-            case "pdf":
-                $this->asset = $this->path . 'docs/' . $file;
+            case 'pdf':
+                $this->asset = $this->path.'docs/'.$file;
         }
 
         return $this->asset;

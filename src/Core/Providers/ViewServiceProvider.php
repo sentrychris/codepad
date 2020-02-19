@@ -3,15 +3,15 @@
 namespace Versyx\Codepad\Core\Providers;
 
 use Pimple\Container;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
-use Twig\Extension\DebugExtension;
 use Pimple\ServiceProviderInterface;
+use Twig\Environment;
+use Twig\Extension\DebugExtension;
+use Twig\Loader\FilesystemLoader;
 use Versyx\Codepad\Core\Extensions\Twig\AssetExtension;
 use Versyx\Codepad\Core\Extensions\Twig\DotenvExtension;
 
 /**
- * Class ViewServiceProvider
+ * Class ViewServiceProvider.
  */
 class ViewServiceProvider implements ServiceProviderInterface
 {
@@ -19,10 +19,12 @@ class ViewServiceProvider implements ServiceProviderInterface
      * Register view service provider.
      *
      * @param Container $pimple
-     * @return Container
+     *
      * @throws \Twig\Error\LoaderError
+     *
+     * @return Container
      */
-    public function register(Container $pimple) : Container
+    public function register(Container $pimple): Container
     {
         $loader = new FilesystemLoader($this->viewPath());
         $pimple['view'] = new Environment($loader, [
@@ -43,7 +45,7 @@ class ViewServiceProvider implements ServiceProviderInterface
      */
     private function viewPath()
     {
-        return __DIR__ . '/../../../resources/views';
+        return __DIR__.'/../../../resources/views';
     }
 
     /**
@@ -53,6 +55,6 @@ class ViewServiceProvider implements ServiceProviderInterface
      */
     private function cachePath()
     {
-        return __DIR__ . '/../../../public/cache';
+        return __DIR__.'/../../../public/cache';
     }
 }
