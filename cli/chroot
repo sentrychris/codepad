@@ -10,9 +10,9 @@ run($app['chroot-manager'], getopt('', ['root::', 'version:', 'first-run::']));
 
 /**
  * Chroot builder method.
- * 
- * @param Chroot $cm
- * @param string $version
+ *
+ * @param ChrootManager $cm
+ * @param array $opts
  */
 function run(ChrootManager $cm, array $opts)
 {

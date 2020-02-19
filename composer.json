@@ -12,7 +12,7 @@
             "Versyx\\Codepad\\": "src"
         },
         "files": [
-            "src/Helpers/functions.php"
+            "src/Core/Helpers/functions.php"
         ]
     },
     "require": {
