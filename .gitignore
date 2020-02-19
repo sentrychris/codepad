@@ -1,6 +1,7 @@
 /vendor
 /.idea
 .env
+/logs/*.log
 /docs/*
 /php-*
 /node_modules
