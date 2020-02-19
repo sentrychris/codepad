@@ -5,7 +5,7 @@
  ----------------------------------------*/
 require_once __DIR__.'/../vendor/autoload.php';
 
-Dotenv\Dotenv::create(__DIR__ . '/../')->load();
+Dotenv\Dotenv::create(__DIR__.'/../')->load();
 
 /*----------------------------------------
  | Register service providers             |
@@ -18,19 +18,21 @@ $app->register(new Versyx\Codepad\Core\Providers\RouteServiceProvider());
 $app->register(new Versyx\Codepad\Core\Providers\ViewServiceProvider());
 
 /**
- * boot method to fetch services from the container
+ * boot method to fetch services from the container.
  *
  * @param $dependency
+ *
  * @return mixed
  */
 function app($dependency = null)
 {
     global $app;
+
     return $app->offsetExists($dependency) ? $app->offsetGet($dependency) : false;
 }
 
 /*----------------------------------------
- | Load controllers                       | 
+ | Load controllers                       |
  ----------------------------------------*/
 require_once __DIR__.'/../config/controllers.php';
 

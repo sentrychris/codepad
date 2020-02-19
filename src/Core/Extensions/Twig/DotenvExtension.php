@@ -2,17 +2,17 @@
 
 namespace Versyx\Codepad\Core\Extensions\Twig;
 
-use \Twig\TwigFunction;
-use \Twig\Extension\AbstractExtension;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
- * Class DotenvExtension
+ * Class DotenvExtension.
  */
 class DotenvExtension extends AbstractExtension
 {
     /**
-     * Define env accessor function
-     * 
+     * Define env accessor function.
+     *
      * @return array
      */
     public function getFunctions()

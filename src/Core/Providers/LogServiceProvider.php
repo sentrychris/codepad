@@ -2,13 +2,13 @@
 
 namespace Versyx\Codepad\Core\Providers;
 
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Pimple\Container;
-use Monolog\Handler\StreamHandler;
 use Pimple\ServiceProviderInterface;
 
 /**
- * Class LogServiceProvider
+ * Class LogServiceProvider.
  */
 class LogServiceProvider implements ServiceProviderInterface
 {
@@ -16,6 +16,7 @@ class LogServiceProvider implements ServiceProviderInterface
      * Register log service provider.
      *
      * @param Container $pimple
+     *
      * @return Container|string
      */
     public function register(Container $pimple)
@@ -38,6 +39,6 @@ class LogServiceProvider implements ServiceProviderInterface
      */
     public function logPath()
     {
-        return __DIR__ . '/../../../logs/app.log';
+        return __DIR__.'/../../../logs/app.log';
     }
 }
